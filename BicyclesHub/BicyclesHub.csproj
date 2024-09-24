@@ -120,6 +120,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\Globals.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -127,6 +128,24 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Images\Electra_Cruiser 1.jpeg" />
+    <Content Include="App_Data\Images\Electra_Cruiser.jpeg" />
+    <Content Include="App_Data\Images\Haro_Bikes1.jpeg" />
+    <Content Include="App_Data\Images\Haro_mountain_bike.jpeg" />
+    <Content Include="App_Data\Images\Heler_bike2.jpeg" />
+    <Content Include="App_Data\Images\Heller_bike1.jpeg" />
+    <Content Include="App_Data\Images\Pure_Cycles1.jpeg" />
+    <Content Include="App_Data\Images\Pure_Cycles2.jpeg" />
+    <Content Include="App_Data\Images\Ritchey_bike2.jpeg" />
+    <Content Include="App_Data\Images\Riychey_bike1.jpeg" />
+    <Content Include="App_Data\Images\Strider_balance_bike1.jpeg" />
+    <Content Include="App_Data\Images\Strider_sport_bike.jpeg" />
+    <Content Include="App_Data\Images\Sun_Bicycles1.jpeg" />
+    <Content Include="App_Data\Images\Sun_bicycles_retro.jpeg" />
+    <Content Include="App_Data\Images\Surly_bike.jpeg" />
+    <Content Include="App_Data\Images\Surly_preamble_bike.jpeg" />
+    <Content Include="App_Data\Images\Trek_Marlin_bike.jpeg" />
+    <Content Include="App_Data\Images\Trek_Xcaliber_bike.jpeg" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
@@ -143,6 +162,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\Styles.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -179,8 +199,8 @@
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\Globals\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
