@@ -22,7 +22,7 @@
                             New Stocks
                         </button>
                     </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <strong>@Model.Summary.NewStocks</strong>
                         </div>
@@ -134,7 +134,8 @@
                                     <ul>
                                         @foreach (var item in brand.Value)
                                         {
-                                            <li><span> @item.Key: </span> @item.Value <br /></li> 
+                                            <li><span> @item.Key: </span> @item.Value <br /></li>
+
                                         }
                                     </ul>
                                     <br />
@@ -171,10 +172,19 @@
                 </div>
             </div>
         </div>
-        <div class="index-image-container">
-            <div class="index-hero"></div>
-           
+        <div class="middle-index">
+            <div class="index-image-container">
+                <div class="index-hero"></div>
+
+            </div>
+            <div class="msg-container">
+                <div class="categories-container" id="categoriesContainer">
+                    <!-- Categories will be displayed here -->
+                </div>
+            </div>
         </div>
+
+
         <div class="brands-container">
             <div class="brands-div"><h4>Brands</h4></div>
             @if (Model.Brands != null)
@@ -182,7 +192,7 @@
                 foreach (var brand in Model.Brands)
                 {
                     <div class="brands-div">
-                        <p id="@brand.Id">@brand.Name</p>
+                        <p id="@brand.Id" class="brand-name" onclick="displayCategories('@brand.Name')">@brand.Name</p>
                     </div>
                 }
             }
@@ -193,7 +203,41 @@
                 </div>
             }
         </div>
-        <div class="msg-container"></div>
+
     </div>
 </main>
+
+<script>
+    function displayCategories(brandName) {
+        var categories = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetCategoriesPerBrand()));
+        console.log(categories);
+        var categoryHtml = '';
+
+        // Check if categories exist for the brand
+        if (categories[brandName]) {
+            // Iterate through the categories
+            for (var category in categories[brandName]) {
+                // Get the image URL and product ID for the category
+                
+                var imageUrl = categories[brandName][category].Item1;
+                var productId = categories[brandName][category].Item2; 
+                var productUrl = `/Home/Product?id=${productId}`;
+
+                categoryHtml += `<div class="category-item">
+                                    <a href="${productUrl}">
+                                        <img class="category-image" src="${imageUrl}" alt="${category}" />
+                                    </a>
+                                    <h5>${category}</h5>
+                                  </div>`;
+            }
+            // Insert the constructed HTML into the container
+            document.getElementById('categoriesContainer').innerHTML = categoryHtml;
+        } else {
+            // If no categories are available for the brand
+            document.getElementById('categoriesContainer').innerHTML = '<p>No categories available for this brand.</p>';
+        }
+    }
+</script>
+
+
 

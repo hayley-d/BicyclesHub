@@ -22,12 +22,25 @@ namespace BicyclesHub.Models
         public BikeStoreViewModel()
         {
             setBrands();
+            setCategory();
             setOrders();
             setOrderItems();
+
             setProducts();
+
+            //set product details
+            foreach (Product p in Products)
+            {
+                var brand = Brands.FirstOrDefault(b => b.Id == p.BrandId);
+                var category = Categories.FirstOrDefault(b => b.Id == p.CategoryId);
+                p.setBrandName(brand?.Name);
+                p.setCategoryName(category?.Name);
+                p.setImageUrl(category?.ImageUrl);
+            }
+
             setStocks();
             setStores();
-            setCategory();
+            
             setSummary();
             setStaff();
             setCustomers();
@@ -81,5 +94,74 @@ namespace BicyclesHub.Models
         {
             Customers = dataManager.GetAllCustomers();
         }
+
+        public Dictionary<string, Dictionary<string, (string ImageUrl, int ProductId)>> GetCategoriesPerBrand()
+        {
+            // Create a Map to hold the categories for each brand
+            var result = new Dictionary<string, Dictionary<string, (string ImageUrl, int ProductId)>>();
+
+            // Group the products by brand and category
+            var productGroups = Products
+                .GroupBy(p => new { p.BrandId, p.CategoryId })
+                .Select(g => new
+                {
+                    BrandId = g.Key.BrandId,
+                    CategoryId = g.Key.CategoryId,
+                    ProductId = g.First().Id
+                });
+
+            // Iterate over the results to populate the map
+            foreach (var group in productGroups)
+            {
+                // Get the brand name
+                var brand = Brands.FirstOrDefault(b => b.Id == group.BrandId)?.Name;
+                // Get the category info
+                var category = Categories.FirstOrDefault(c => c.Id == group.CategoryId);
+
+                if (brand != null && category != null)
+                {
+                    if (!result.ContainsKey(brand))
+                    {
+                        result[brand] = new Dictionary<string, (string ImageUrl,int ProductId)>();
+                    }
+
+                    // Add the category name and image URL
+                    result[brand].Add(category.Name, (category.ImageUrl,group.ProductId));
+                }
+            }
+
+            return result;
+        }
+
+        
+        public Dictionary<string, string> GetCategoriesByBrand(string brandName)
+        {
+            var result = new Dictionary<string, string>();
+            var categoriesPerBrand = GetCategoriesPerBrand();
+            if (categoriesPerBrand.ContainsKey(brandName))
+            {
+                foreach (var category in categoriesPerBrand[brandName])
+                {
+                    result.Add(category.Key, category.Value.ImageUrl);
+                }
+            }
+            return result;
+        }
+
+        public Product GetProductById(int id)
+        {
+            return Products.FirstOrDefault(p => p.Id == id);
+        }
+
+        public int GetProductFromBrand(string brandName, string categoryName)
+        {
+            var brand = Brands.FirstOrDefault(b => b.Name == brandName);
+            var category = Categories.FirstOrDefault(b => b.Name == categoryName);
+
+            Product product = Products.FirstOrDefault(p => p.BrandId == brand.Id && p.CategoryId == category.Id);
+            return product.Id;
+        }
+
+
     }
 }

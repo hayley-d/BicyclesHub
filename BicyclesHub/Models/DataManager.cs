@@ -24,10 +24,11 @@ namespace BicyclesHub.Models
             List<Store> stores = GetAllStores();
             List<Category> categories = GetAllCategories();
 
+            int newStocks = stocks.Sum(stock => stock.Quantity);
             int listed_for_sale = stocks.Sum(stock => stock.Quantity);
             int total_sold = GetAllOrders().Count;
 
-            //int totalSoldForBrandA = sales_per_brand["BrandA"];
+            
             Dictionary<string,int> sales_per_brand = orders
                 .Join(products, oi => oi.ProductId, p => p.Id, (oi, p) => new { oi, p })
                 .Join(brands, op => op.p.BrandId, b => b.Id, (op, b) => new { op.oi.Quantity, b.Name })
@@ -63,7 +64,7 @@ namespace BicyclesHub.Models
                     g => g.Sum(x => x.stock.Quantity)
                 );
 
-            return new Summary(0, listed_for_sale, total_sold, sales_per_brand, listings_per_brand, average_sale_per_brand, total_per_brand_category, total_per_store);
+            return new Summary(newStocks, listed_for_sale, total_sold, sales_per_brand, listings_per_brand, average_sale_per_brand, total_per_brand_category, total_per_store);
         }
 
         public Dictionary<string, Dictionary<string, int>> CountBicyclesPerCategoryForEachBrand(List<Product> products, List<Brand> brands, List<Category> categories)
@@ -88,6 +89,8 @@ namespace BicyclesHub.Models
                 var brand = brands.FirstOrDefault(b => b.Id == group.BrandId)?.Name;
                 // Get the category name
                 var category = categories.FirstOrDefault(c => c.Id == group.CategoryId)?.Name;
+
+                
 
                 if (brand != null && category != null)
                 {

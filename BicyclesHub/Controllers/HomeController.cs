@@ -26,11 +26,19 @@ namespace BicyclesHub.Controllers
             return View();
         }
 
-        public ActionResult Contact()
+        public ActionResult Product(int id)
         {
-            ViewBag.Message = "Your contact page.";
+            var product = bike_store.GetProductById(id);
 
-            return View();
+            if (product == null)
+            {
+                product = new Product(-1, "Not Found", -1, -1, 000, 0);
+                product.setBrandName("Not Found");
+                product.setCategoryName("Not Found");
+                product.setImageUrl("https://pbs.twimg.com/media/C5OTOt3UEAAExIk.jpg");
+            }
+
+            return View(product);
         }
     }
 }
