@@ -3,12 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\2002d\\Dropbox\\INF 272\\Assignment\\BicyclesHub\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{407AA2A4-34EE-4446-8DA9-595FA4EC4B02}|BicyclesHub\\BicyclesHub.csproj|C:\\Users\\2002d\\Dropbox\\INF 272\\Assignment\\BicyclesHub\\bicycleshub\\content\\styles.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{407AA2A4-34EE-4446-8DA9-595FA4EC4B02}|BicyclesHub\\BicyclesHub.csproj|solutionrelative:bicycleshub\\content\\styles.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{407AA2A4-34EE-4446-8DA9-595FA4EC4B02}|BicyclesHub\\BicyclesHub.csproj|c:\\users\\2002d\\dropbox\\inf 272\\assignment\\bicycleshub\\bicycleshub\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{407AA2A4-34EE-4446-8DA9-595FA4EC4B02}|BicyclesHub\\BicyclesHub.csproj|solutionrelative:bicycleshub\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{407AA2A4-34EE-4446-8DA9-595FA4EC4B02}|BicyclesHub\\BicyclesHub.csproj|C:\\Users\\2002d\\Dropbox\\INF 272\\Assignment\\BicyclesHub\\bicycleshub\\content\\styles.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{407AA2A4-34EE-4446-8DA9-595FA4EC4B02}|BicyclesHub\\BicyclesHub.csproj|solutionrelative:bicycleshub\\content\\styles.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+      "AbsoluteMoniker": "D:0:0:{407AA2A4-34EE-4446-8DA9-595FA4EC4B02}|BicyclesHub\\BicyclesHub.csproj|c:\\users\\2002d\\dropbox\\inf 272\\assignment\\bicycleshub\\bicycleshub\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{407AA2A4-34EE-4446-8DA9-595FA4EC4B02}|BicyclesHub\\BicyclesHub.csproj|solutionrelative:bicycleshub\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{407AA2A4-34EE-4446-8DA9-595FA4EC4B02}|BicyclesHub\\BicyclesHub.csproj|c:\\users\\2002d\\dropbox\\inf 272\\assignment\\bicycleshub\\bicycleshub\\models\\datamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{407AA2A4-34EE-4446-8DA9-595FA4EC4B02}|BicyclesHub\\BicyclesHub.csproj|solutionrelative:bicycleshub\\models\\datamanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,30 +26,56 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\2002d\\Dropbox\\INF 272\\Assignment\\BicyclesHub\\BicyclesHub\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "BicyclesHub\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\2002d\\Dropbox\\INF 272\\Assignment\\BicyclesHub\\BicyclesHub\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "BicyclesHub\\Controllers\\HomeController.cs",
+              "ViewState": "AQIAAAcAAAAAAAAAAAAAwBkAAAA8AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-24T02:35:28.62Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DataManager.cs",
+              "DocumentMoniker": "C:\\Users\\2002d\\Dropbox\\INF 272\\Assignment\\BicyclesHub\\BicyclesHub\\Models\\DataManager.cs",
+              "RelativeDocumentMoniker": "BicyclesHub\\Models\\DataManager.cs",
+              "ToolTip": "C:\\Users\\2002d\\Dropbox\\INF 272\\Assignment\\BicyclesHub\\BicyclesHub\\Models\\DataManager.cs",
+              "RelativeToolTip": "BicyclesHub\\Models\\DataManager.cs",
+              "ViewState": "AQIAAAQAAAAAAAAAAAAQwBgAAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-24T02:14:27.991Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
               "Title": "Styles.css",
               "DocumentMoniker": "C:\\Users\\2002d\\Dropbox\\INF 272\\Assignment\\BicyclesHub\\BicyclesHub\\Content\\Styles.css",
               "RelativeDocumentMoniker": "BicyclesHub\\Content\\Styles.css",
               "ToolTip": "C:\\Users\\2002d\\Dropbox\\INF 272\\Assignment\\BicyclesHub\\BicyclesHub\\Content\\Styles.css",
               "RelativeToolTip": "BicyclesHub\\Content\\Styles.css",
-              "ViewState": "AQIAAC4AAAAAAAAAAAAAAEgAAAAkAAAA",
+              "ViewState": "AQIAAE8AAAAAAAAAAAAAAF0AAAAQAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
               "WhenOpened": "2024-09-23T22:13:26.557Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\2002d\\Dropbox\\INF 272\\Assignment\\BicyclesHub\\BicyclesHub\\Views\\Home\\Index.cshtml",
               "RelativeDocumentMoniker": "BicyclesHub\\Views\\Home\\Index.cshtml",
               "ToolTip": "C:\\Users\\2002d\\Dropbox\\INF 272\\Assignment\\BicyclesHub\\BicyclesHub\\Views\\Home\\Index.cshtml",
               "RelativeToolTip": "BicyclesHub\\Views\\Home\\Index.cshtml",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABgAAAAkAAAA",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAABwAAAA9AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-09-23T22:11:22.908Z",
               "EditorCaption": ""

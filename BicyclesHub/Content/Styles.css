@@ -30,14 +30,26 @@
     grid-template-rows: 1fr 1fr;
 }
 
-.search-container {
+.search-container, .brands-container {
     display: flex;
     background-color: white;
     border-radius: 10px;
-    width:100%;
-    height:fit-content;
-    padding:10px;
+    width: 100%;
+    height: fit-content;
+    padding: 10px;
+    flex-direction:column;
 }
+
+.search-container > div > h4, .brands-container > div > h4 {
+    color:darkslateblue;
+}
+
+.brands-div {
+    text-align:center;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+ }
 
 .nav-search{
     outline:none;
@@ -47,7 +59,7 @@
 }
 
 .svg:hover{
-    fill:aquamarine;
+    fill:aqua;
 }
 
 .search-btn{
@@ -57,7 +69,8 @@
 .index-nav{
     width:80%;
     display:grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    margin-bottom:20px;
 }
 
 .nav-container{
@@ -71,4 +84,16 @@
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
+    padding:10px;
+    
+}
+
+.index-hero {
+    border-radius: 20px;
+    width: 100%;
+    height:100%;
+    background-image: url("https://bike-addict.co.za/cdn/shop/collections/road-bike-guide-hero-fix-1600x800-1688712_original_1_1400x.jpg?v=1623331298");
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:cover;
 }

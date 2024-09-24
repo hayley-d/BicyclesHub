@@ -8,6 +8,6 @@ namespace BicyclesHub.Controllers
 {
     public static class Globals
     {
-        public static string ConnectionString = "Data Source=HAYLEY-LAPTOP\\SQLEXPRESS;Initial Catalog=BikeStore;Integrated Security=True;";
+        public static string ConnectionString = "Data Source=HAYLEY-LAPTOP\\SQLEXPRESS;Initial Catalog=BikeStores;Integrated Security=True;";
     }
 }

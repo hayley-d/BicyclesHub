@@ -2,8 +2,8 @@
     ViewBag.Title = "Home Page";
 }
 
-<main>
-    <nav class="navbar navbar-expand-sm justify-content-center align-items-center" >
+<main style="padding:20px">
+    <nav class="navbar navbar-expand-sm justify-content-center align-items-center">
         <div class="index-nav">
             <div class="nav-container">@Html.ActionLink("Register", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</div>
             <div class="nav-container">@Html.ActionLink("Sell", "About", "Home", new { area = "" }, new { @class = "nav-link" })</div>
@@ -14,18 +14,56 @@
     </nav>
     <div class="index-grid">
         <div class="summery-container">
-            <div><h3>Summaries</h3></div>
-            <div><p>New Stocks</p></div>
-            <div><p>Listed For Sale</p></div>
-            <div><p>Total Sold</p></div>
-            <div><p>Sales Per Brand</p></div>
-            <div><p>Listings Total</p></div>
-            <div><p>Average Sales Per Brand</p></div>
-            <div><p>Totals Per Brand</p></div>
-            <div><p>totals By Stores</p></div>
+            <div><h4>Summaries</h4></div>
+            <div><p id="new-stocks">New Stocks: <span></span></p></div>
+            <div><p id="listed-for-sale">Listed For Sale: <span></span></p></div>
+            <div><p id="total-sold">Total Sold: <span></span></p></div>
+            <div><p id="sales-per-brand">Sales Per Brand: <span></span></p></div>
+            <div><p id="listings-total">Listings Total: <span></span></p></div>
+            <div><p id="avg-sales-per-brand">Average Sales Per Brand: <span></span></p></div>
+            <div><p id="totals-per-brand">Totals Per Brand: <span></span></p></div>
+            <div><p id="totals-by-stores">Totals By Stores: <span></span></p></div>
         </div>
-        <div class="index-image-container"></div>
-        <div class="brands-container"></div>
+        <div class="index-image-container">
+            <div class="index-hero"></div>
+            @*<img  alt="bicycles" src="@Url.Content("")"/>*@
+        </div>
+        <div class="brands-container">
+            <div class="brands-div"><h4>Brands</h4></div>
+            @if (Model != null)
+            {
+                foreach (var brand in Model)
+                {
+                    <div class="brands-div">
+                        <p id="@brand.Id">@brand.Name</p>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="brands-div">
+                    <p>No brands available.</p>
+                </div>
+            }
+        </div>
         <div class="msg-container"></div>
     </div>
 </main>
+
+<script>
+$(document).ready(function() {
+    // Fetch new stocks
+   @* $.get('@Url.Action("GetNewStocks", "Home")', function(data) {
+        $('#new-stocks span').text(data);
+    });*@
+
+
+    // Fetch listed for sale
+
+    @*$.get('@Url.Action("GetListedForSale", "Home")', function(data) {
+        $('#listed-for-sale span').text(data);
+    });*@
+
+    // Repeat for other summaries...
+});
+</script>
