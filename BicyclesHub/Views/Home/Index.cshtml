@@ -15,24 +15,171 @@
     <div class="index-grid">
         <div class="summery-container">
             <div><h4>Summaries</h4></div>
-            <div><p id="new-stocks">New Stocks: <span></span></p></div>
-            <div><p id="listed-for-sale">Listed For Sale: <span></span></p></div>
-            <div><p id="total-sold">Total Sold: <span></span></p></div>
-            <div><p id="sales-per-brand">Sales Per Brand: <span></span></p></div>
-            <div><p id="listings-total">Listings Total: <span></span></p></div>
-            <div><p id="avg-sales-per-brand">Average Sales Per Brand: <span></span></p></div>
-            <div><p id="totals-per-brand">Totals Per Brand: <span></span></p></div>
-            <div><p id="totals-by-stores">Totals By Stores: <span></span></p></div>
+            <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            New Stocks
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <strong>@Model.Summary.NewStocks</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Listed For Sale
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <strong>@Model.Summary.ListedForSale</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Total Sold
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <strong>@Model.Summary.TotalSold</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingFour">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            Sales Per Brand
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            @if (Model.Summary.SalesPerBrand != null && Model.Summary.SalesPerBrand.Count > 0)
+                            {
+                                foreach (var item in Model.Summary.SalesPerBrand)
+                                {
+                                    <strong>@item.Key:</strong> @item.Value <br />
+                                }
+                            }
+                            else
+                            {
+                                <p>No sales data available.</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingFive">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                            Listings Total
+                        </button>
+                    </h2>
+                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            @if (Model.Summary.ListingsTotal != null && Model.Summary.ListingsTotal.Count > 0)
+                            {
+                                foreach (var item in Model.Summary.ListingsTotal)
+                                {
+                                    <strong>@item.Key:</strong> @item.Value <br />
+                                }
+                            }
+                            else
+                            {
+                                <p>No listings data available.</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingSix">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                            Average Sales Per Brand
+                        </button>
+                    </h2>
+                    <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            @if (Model.Summary.AverageSalesPerBrand != null && Model.Summary.AverageSalesPerBrand.Count > 0)
+                            {
+                                foreach (var item in Model.Summary.AverageSalesPerBrand)
+                                {
+                                    <strong>@item.Key:</strong> @item.Value <br />
+                                }
+                            }
+                            else
+                            {
+                                <p>No sales data available.</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingSeven">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                            Totals Per Brand
+                        </button>
+                    </h2>
+                    <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            @if (Model.Summary.TotalsPerBrand != null && Model.Summary.TotalsPerBrand.Count > 0)
+                            {
+                                foreach (var brand in Model.Summary.TotalsPerBrand)
+                                {
+                                    <strong>@brand.Key:</strong><br />
+                                    <ul>
+                                        @foreach (var item in brand.Value)
+                                        {
+                                            <li><span> @item.Key: </span> @item.Value <br /></li> 
+                                        }
+                                    </ul>
+                                    <br />
+                                }
+                            }
+                            else
+                            {
+                                <p>No totals data available.</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingEight">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                            Totals By Stores
+                        </button>
+                    </h2>
+                    <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            @if (Model.Summary.TotalsByStore != null && Model.Summary.TotalsByStore.Count > 0)
+                            {
+                                foreach (var item in Model.Summary.TotalsByStore)
+                                {
+                                    <strong>@item.Key:</strong> @item.Value <br />
+                                }
+                            }
+                            else
+                            {
+                                <p>No store data available.</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="index-image-container">
             <div class="index-hero"></div>
-            @*<img  alt="bicycles" src="@Url.Content("")"/>*@
+           
         </div>
         <div class="brands-container">
             <div class="brands-div"><h4>Brands</h4></div>
-            @if (Model != null)
+            @if (Model.Brands != null)
             {
-                foreach (var brand in Model)
+                foreach (var brand in Model.Brands)
                 {
                     <div class="brands-div">
                         <p id="@brand.Id">@brand.Name</p>
@@ -50,20 +197,3 @@
     </div>
 </main>
 
-<script>
-$(document).ready(function() {
-    // Fetch new stocks
-   @* $.get('@Url.Action("GetNewStocks", "Home")', function(data) {
-        $('#new-stocks span').text(data);
-    });*@
-
-
-    // Fetch listed for sale
-
-    @*$.get('@Url.Action("GetListedForSale", "Home")', function(data) {
-        $('#listed-for-sale span').text(data);
-    });*@
-
-    // Repeat for other summaries...
-});
-</script>

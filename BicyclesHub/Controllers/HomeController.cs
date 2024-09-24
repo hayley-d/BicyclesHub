@@ -12,13 +12,11 @@ namespace BicyclesHub.Controllers
     {
         SqlConnection myConnection = new SqlConnection(Globals.ConnectionString);
         
-        private DataManager dataManager = new DataManager();
+        private BikeStoreViewModel bike_store = new BikeStoreViewModel();
 
         public ActionResult Index()
         {
-            var brands = dataManager.GetAllBrands(); 
-            return View(brands);
-           
+            return View(bike_store);
         }
 
         public ActionResult About()

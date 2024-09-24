@@ -10,13 +10,13 @@ namespace BicyclesHub.Models
         public int NewStocks { get; set; }
         public int ListedForSale { get; set; }
         public int TotalSold { get; set; }
-        public int SalesPerBrand { get; set; }
-        public int ListingsTotal { get; set; }
-        public int AverageSalesPerBrand { get; set; }
-        public int TotalsPerBrand { get; set; }
-        public int TotalsByStore { get; set; }
+        public Dictionary<string,int> SalesPerBrand { get; set; }
+        public Dictionary<string, int> ListingsTotal { get; set; }
+        public Dictionary<string, decimal> AverageSalesPerBrand { get; set; }
+        public Dictionary<string, Dictionary<string, int>> TotalsPerBrand { get; set; }
+        public Dictionary<string, int> TotalsByStore { get; set; }
 
-        public Summary(int newStocks, int listedForSale, int totalSold, int salesPerBrand, int listingsTotal, int averageSalesPerBrand, int totalsPerBrand, int totalsByStore)
+        public Summary(int newStocks, int listedForSale, int totalSold, Dictionary<string,int> salesPerBrand, Dictionary<string, int> listingsTotal, Dictionary<string, decimal> averageSalesPerBrand, Dictionary<string, Dictionary<string, int>> totalsPerBrand, Dictionary<string, int> totalsByStore)
         {
             NewStocks = newStocks;
             ListedForSale = listedForSale;
