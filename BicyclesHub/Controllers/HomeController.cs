@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -12,7 +13,7 @@ namespace BicyclesHub.Controllers
     {
         SqlConnection myConnection = new SqlConnection(Globals.ConnectionString);
         
-        private BikeStoreViewModel bike_store = new BikeStoreViewModel();
+        private static BikeStoreViewModel bike_store = new BikeStoreViewModel();
 
         public ActionResult Index()
         {
@@ -99,7 +100,7 @@ namespace BicyclesHub.Controllers
                     }
                     catch (Exception ex)
                     {
-                        return View("Index");
+                        return RedirectToAction("Index");
                     }
                 }
             }
@@ -138,7 +139,7 @@ namespace BicyclesHub.Controllers
                     }
                     catch (Exception ex)
                     {
-                        return View("Index");
+                        return RedirectToAction("Index");
                     }
                 }
             }
@@ -172,11 +173,71 @@ namespace BicyclesHub.Controllers
                     }
                     catch (Exception ex)
                     {
-                        return View("Index");
+                        return RedirectToAction("Index");
                     }
                 }
             }
             return RedirectToAction("Login");
         }
+
+        [HttpPost]
+        public ActionResult Login(string email, string phone)
+        {
+            using (SqlConnection myConnection = new SqlConnection(Globals.ConnectionString))
+            {
+                Session["IsOwner"] = false; 
+                Session["IsCustomer"] = false; 
+
+                string customerQuery = "SELECT * FROM [sales].[customers] WHERE [email] = @Email AND [phone] = @Phone";
+                using (SqlCommand customerCommand = new SqlCommand(customerQuery, myConnection))
+                {
+                    customerCommand.Parameters.AddWithValue("@Email", email);
+                    customerCommand.Parameters.AddWithValue("@Phone", phone);
+
+                    myConnection.Open();
+                    SqlDataReader customerReader = customerCommand.ExecuteReader();
+
+                    if (customerReader.Read())
+                    {
+                        // Store customer session variables
+                        Session["user"] = customerReader["customer_id"];
+                        Session["Email"] = customerReader["email"];
+                        Session["IsCustomer"] = true;
+                    }
+                    customerReader.Close();
+                }
+
+                // Check in stores table
+                if (true)
+                {
+                    string storeQuery = "SELECT * FROM [sales].[stores] WHERE [email] = @Email AND [phone] = @Phone";
+                    using (SqlCommand storeCommand = new SqlCommand(storeQuery, myConnection))
+                    {
+                        storeCommand.Parameters.AddWithValue("@Email", email);
+                        storeCommand.Parameters.AddWithValue("@Phone", phone);
+                        SqlDataReader storeReader = storeCommand.ExecuteReader();
+                        if (storeReader.Read())
+                        {
+                            // Store store owner session variables
+                            Session["user"] = storeReader["store_id"];
+                            Session["Email"] = storeReader["email"];
+                            Session["IsOwner"] = true;
+                        }
+                    }
+                }
+            }
+            // Pass the session variables to the bike_store
+            
+            bike_store.setUser(Convert.ToInt32(Session["user"]), Session["Email"].ToString(),Convert.ToBoolean(Session["IsCustomer"]), Convert.ToBoolean(Session["IsOwner"]));
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Logout()
+        {
+            Session.Clear(); // Clear all session variables
+            return RedirectToAction("Login");
+        }
+
+
     }
 }

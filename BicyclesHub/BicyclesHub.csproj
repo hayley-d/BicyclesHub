@@ -129,6 +129,7 @@
     <Compile Include="Models\BikeStoreViewModel.cs" />
     <Compile Include="Models\Brand.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\CurrentUser.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\DataManager.cs" />
     <Compile Include="Models\Order.cs" />

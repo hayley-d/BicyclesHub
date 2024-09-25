@@ -19,6 +19,8 @@ namespace BicyclesHub.Models
         public List<Customer> Customers { get; set; }
         public Summary Summary { get; set; }
 
+        public CurrentUser CurrentUser  { get; set; } 
+
         public BikeStoreViewModel()
         {
             setBrands();
@@ -44,6 +46,8 @@ namespace BicyclesHub.Models
             setSummary();
             setStaff();
             setCustomers();
+
+            setUser(-1, "", false, false);
         }
 
         public void setBrands()
@@ -93,6 +97,16 @@ namespace BicyclesHub.Models
         public void setCustomers()
         {
             Customers = dataManager.GetAllCustomers();
+        }
+
+        public Boolean isLoggedIn()
+        {
+            return CurrentUser.Id != -1 ? true : false;
+        }
+
+        public void setUser(int id, string email, bool isCustomer, bool isOwner)
+        {
+            this.CurrentUser = new CurrentUser(id, email, isCustomer, isOwner);
         }
 
         public Dictionary<string, Dictionary<string, (string ImageUrl, int ProductId)>> GetCategoriesPerBrand()

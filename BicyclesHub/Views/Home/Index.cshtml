@@ -6,10 +6,13 @@
     <nav class="navbar navbar-expand-sm justify-content-center align-items-center">
         <div class="index-nav">
             <div class="nav-container">@Html.ActionLink("Register", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</div>
-            <div class="nav-container">@Html.ActionLink("Sell", "About", "Home", new { area = "" }, new { @class = "nav-link" })</div>
-            <div class="nav-container">@Html.ActionLink("Buy", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</div>
-            <div class="nav-container">@Html.ActionLink("My Bikes", "About", "Home", new { area = "" }, new { @class = "nav-link" })</div>
-            <div class="nav-container">@Html.ActionLink("Login", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</div>
+            @if (Model.isLoggedIn())
+            {
+                <div class="nav-container">@Html.ActionLink("Sell", "About", "Home", new { area = "" }, new { @class = "nav-link" })</div>
+                <div class="nav-container">@Html.ActionLink("Buy", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</div>
+                <div class="nav-container">@Html.ActionLink("My Bikes", "About", "Home", new { area = "" }, new { @class = "nav-link" })</div>
+            }
+            <div class="nav-container">@Html.ActionLink("Login", "Login", "Home", new { area = "" }, new { @class = "nav-link" })</div>
         </div>
     </nav>
     <div class="index-grid">
@@ -230,26 +233,13 @@
 <script>
     function displayCategories(brandName) {
         var categories = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetCategoriesPerBrand()));
-        console.log(categories);
         var categoryHtml = '';
-
-        // Check if categories exist for the brand
         if (categories[brandName]) {
-            // Iterate through the categories
             for (var category in categories[brandName]) {
-                // Get the image URL and product ID for the category
-
                 var imageUrl = categories[brandName][category].Item1;
                 var productId = categories[brandName][category].Item2;
                 var productUrl = `/Home/Product?id=${productId}`;
-
-                categoryHtml += /*`<div class="category-item">
-                                    <a href="${productUrl}">
-                                        <img class="category-image" src="${imageUrl}" alt="${category}" />
-                                    </a>
-                                    <h5>${category}</h5>
-                                  </div>`;*/
-                                   `<div class="card" style="width: 18rem; height: 300px;" >
+                categoryHtml +=  `<div class="card" style="width: 18rem; height: 300px;" >
                                       <img class="card-img-top category-image" src="${imageUrl}" alt="${category}">
                                       <div class="card-body">
                                         <h5 class="card-title">${category}</h5>
@@ -257,10 +247,8 @@
                                       </div>
                                     </div>`;
             }
-            // Insert the constructed HTML into the container
             document.getElementById('categoriesContainer').innerHTML = categoryHtml;
         } else {
-            // If no categories are available for the brand
             document.getElementById('categoriesContainer').innerHTML = '<p>No categories available for this brand.</p>';
         }
     }
@@ -269,16 +257,12 @@
     var storeInfo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetProductsInStockByStore()));
     var stores = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Stores));
     var storeNames = [];
-
     stores.forEach(function (store) {
         if (store.Address.State === storeState) {
             storeNames.push(store.Name);
         }
     });
-
     var categoryHtml = '';
-
-    // Iterate through the store names and fetch products for each store
     storeNames.forEach(function (name) {
         if (storeInfo[name]) {
             storeInfo[name].Item2.forEach(function (product) {
