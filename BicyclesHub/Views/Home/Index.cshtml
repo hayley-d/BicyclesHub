@@ -202,6 +202,26 @@
                     <p>No brands available.</p>
                 </div>
             }
+
+            <div class="brands-div"><h4>Store Locations</h4></div>
+            @if (Model.Stores != null)
+            {
+                foreach (var store in Model.Stores)
+                {
+                    if(store.Address.getState() != "")
+                    {
+                        <div class="brands-div">
+                            <p id="@store.Id" class="brand-name" onclick="displayStoreProducts('@store.Address.getState()')">@store.Address.getState()</p>
+                        </div>
+                    }
+                }
+            }
+            else
+            {
+                <div class="brands-div">
+                    <p>No stores available.</p>
+                </div>
+            }
         </div>
 
     </div>
@@ -218,17 +238,24 @@
             // Iterate through the categories
             for (var category in categories[brandName]) {
                 // Get the image URL and product ID for the category
-                
+
                 var imageUrl = categories[brandName][category].Item1;
-                var productId = categories[brandName][category].Item2; 
+                var productId = categories[brandName][category].Item2;
                 var productUrl = `/Home/Product?id=${productId}`;
 
-                categoryHtml += `<div class="category-item">
+                categoryHtml += /*`<div class="category-item">
                                     <a href="${productUrl}">
                                         <img class="category-image" src="${imageUrl}" alt="${category}" />
                                     </a>
                                     <h5>${category}</h5>
-                                  </div>`;
+                                  </div>`;*/
+                                   `<div class="card" style="width: 18rem; height: 300px;" >
+                                      <img class="card-img-top category-image" src="${imageUrl}" alt="${category}">
+                                      <div class="card-body">
+                                        <h5 class="card-title">${category}</h5>
+                                        <a href="${productUrl}" class="btn btn-primary">See Product</a>
+                                      </div>
+                                    </div>`;
             }
             // Insert the constructed HTML into the container
             document.getElementById('categoriesContainer').innerHTML = categoryHtml;
@@ -237,6 +264,44 @@
             document.getElementById('categoriesContainer').innerHTML = '<p>No categories available for this brand.</p>';
         }
     }
+
+   function displayStoreProducts(storeState) {
+    var storeInfo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetProductsInStockByStore()));
+    var stores = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Stores));
+    var storeNames = [];
+
+    stores.forEach(function (store) {
+        if (store.Address.State === storeState) {
+            storeNames.push(store.Name);
+        }
+    });
+
+    var categoryHtml = '';
+
+    // Iterate through the store names and fetch products for each store
+    storeNames.forEach(function (name) {
+        if (storeInfo[name]) {
+            storeInfo[name].Item2.forEach(function (product) {
+                var imageUrl = product.ImageUrl;  
+                var productId = product.Id;      
+                var productUrl = `/Home/Product?id=${productId}`; 
+                categoryHtml += `<div class="card" style="width: 20rem; height: 400px;">
+                        <img class="card-img-top category-image" src="${imageUrl}" alt="${product.Name}">
+                        <div class="card-body">
+                            <h5 class="card-title">${product.Name}</h5>
+                            <a href="${productUrl}" class="btn btn-primary">See Product</a>
+                        </div>
+                    </div>`;
+            });
+        }
+    });
+    if (categoryHtml.length > 0) {
+        document.getElementById('categoriesContainer').innerHTML = categoryHtml;
+    } else {
+        document.getElementById('categoriesContainer').innerHTML = '<p>No products available for this store.</p>';
+    }
+}
+
 </script>
 
 

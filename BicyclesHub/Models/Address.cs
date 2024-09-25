@@ -7,10 +7,10 @@ namespace BicyclesHub.Models
 {
     public class Address
     {
-        private string Street {  get; set; }
-        private string City { get; set; }
-        private string State { get; set; }
-        private string ZipCode { get; set; }
+        public string Street {  get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string ZipCode { get; set; }
 
         public Address(string street, string city, string state, string zip_code) {
             this.Street = street;

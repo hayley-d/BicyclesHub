@@ -2,15 +2,55 @@
     ViewBag.Title = "Contact";
 }
 <main aria-labelledby="title">
+    <div style="margin-top:20px; margin-left:20px;"><a href="@Url.Action("Index", "Home")" class="btn btn-primary">Back to Products</a></div>
     <div class="product-container">
-        <h1>@Model.Name</h1>
-        <img src="@Model.ImageUrl" alt="@Model.Name" />
-        <p>Brand: @Model.BrandName</p>
-        <p>Category: @Model.CategoryName</p>
-        <p>Model Year: @Model.ModelYear</p>
-        <p>Price: @Model.ListPrice.ToString("C")</p>
-        <p>Description: <!-- Add a description if available --></p>
-
-        <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Back to Products</a>
+        <div><h1>@Model.Name</h1></div>
+        <div class="container-fluid product-container "><img class="product-image-page" src="@Model.ImageUrl" alt="@Model.Name" /></div>
+        <div class="product-details-container">
+            <div><p class="product-details"><strong>Brand: </strong>@Model.BrandName</p></div>
+            <div><p class="product-details"><strong>Category: </strong> @Model.CategoryName</p></div>
+            <div><p class="product-details"><strong>Model Year: </strong> @Model.ModelYear</p></div>
+            <div>
+                <p class="product-details">
+                    <strong>Price:</strong>
+                    <span id="price-display">@Model.ListPrice.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("en-US"))</span>
+                    <div class="dropdown d-inline">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="currencyDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Currency
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="currencyDropdown">
+                            <a class="dropdown-item" href="#" onclick="convertCurrency('USD')">USD</a>
+                            <a class="dropdown-item" href="#" onclick="convertCurrency('ZAR')">ZAR</a>
+                        </div>
+                    </div>
+                </p>
+            </div>
+            <div style="margin-top:20px; margin-left:20px;"><button href="@Url.Action("PurchaceOrder", "Home")" class="btn btn-primary">Buy Bike</button></div>
+        </div>
+        
     </div>
 </main>
+
+<script>
+    // Assumed base price is USD
+    var usdPrice = @Model.ListPrice;
+
+    var conversionRates = {
+        "USD": 1, 
+        "ZAR": 19.5 
+    };
+
+    function convertCurrency(currency) {
+        var priceElement = document.getElementById('price-display');
+        var convertedPrice;
+        if (currency === 'USD') {
+            // Convert to USD
+            convertedPrice = usdPrice;
+            priceElement.innerHTML = convertedPrice.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+        } else if (currency === 'ZAR') {
+            // Convert to ZAR
+            convertedPrice = usdPrice * conversionRates['ZAR'];
+            priceElement.innerHTML = convertedPrice.toLocaleString('en-ZA', { style: 'currency', currency: 'ZAR' });
+        }
+    }
+</script>

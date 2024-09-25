@@ -162,6 +162,32 @@ namespace BicyclesHub.Models
             return product.Id;
         }
 
+        public Dictionary<string, (Store, List<Product>)> GetProductsInStockByStore()
+        {
+            var storeProductMap = new Dictionary<string, (Store, List<Product>)>();
+            foreach (var store in Stores)
+            {
+                // Find the products in stock for the current store
+                var productsInStock = (from stock in Stocks
+                                       join product in Products on stock.ProductId equals product.Id
+                                       where stock.StoreId == store.Id && stock.Quantity > 0
+                                       select product).ToList();
+                if (productsInStock.Any())
+                {
+                    if (!storeProductMap.ContainsKey(store.Name))
+                    {
+                        // Initialize the tuple with the store and products
+                        storeProductMap[store.Name] = (store, new List<Product>());
+                    }
+                    storeProductMap[store.Name].Item2.AddRange(productsInStock);
+                }
+            }
+
+            return storeProductMap;
+        }
+
+
+
 
     }
 }

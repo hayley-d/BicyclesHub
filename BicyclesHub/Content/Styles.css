@@ -138,6 +138,7 @@
     display: felx;
     justify-content: center;
     align-items: center;
+    margin-top:20px;
 }
 
 .middle-index{
@@ -153,4 +154,32 @@
     grid-template-columns: 1fr 1fr;
     justify-content: center;
     align-items: center;
+    gap:20px;
+}
+
+.product-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 20px 10px 20px;
+}
+
+.product-details-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width:100%;
+    justify-content:flex-start;
+}
+
+.product-image-page{
+    border-radius:20px;
+    width:300px;
+    height:250px;
+}
+
+.product-details{
+    font-size:20px;
 }
