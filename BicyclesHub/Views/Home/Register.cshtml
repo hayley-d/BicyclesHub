@@ -1,0 +1,450 @@
+﻿@{
+    ViewBag.Title = "About";
+}
+<main aria-labelledby="title" style="padding:20px; display:flex; flex-direction:column; gap:20px; align-items:center; justify-content:center;">
+    <div class="registration-drop-container">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Choose Registration Type
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <button class="dropdown-item" type="button" onclick="showForm('buyer')">Register as Buyer</button>
+                <button class="dropdown-item" type="button" onclick="showForm('seller')">Register as Seller</button>
+                <button class="dropdown-item" type="button" onclick="showForm('both')">Register as Both</button>
+            </div>
+        </div>
+    </div>
+    <div id="buyer-form" style="display:none;">
+        <form method="post" action="@Url.Action("RegisterBuyer", "Home")">
+            <h3>Register as a Buyer</h3>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputEmail">Email</label>
+                    <input type="email" class="form-control" id="inputEmail"  name="Email" placeholder="Email">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputPhone">Phone Number</label>
+                    <input type="text" class="form-control" id="inputPhone" name="PhoneNumber" placeholder="Phone Number">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputFirst">First Name</label>
+                    <input type="text" class="form-control" id="inputFirst" name="FirstName" placeholder="First Name">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputLastName">Last Name</label>
+                    <input type="text" class="form-control" id="inputLastName" name="LastName" placeholder="Last Name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputStreet">Street Address</label>
+                <input type="text" class="form-control" id="inputStreet" name="StreetAddress">
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputCity">City</label>
+                    <input type="text" class="form-control" id="inputCity" name="City">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputCountry">Country</label>
+                    <select id="inputCountry" class="form-control" name="Country">
+                        <option id="USA" selected>United States</option>
+                        <option id="SA">South Africa</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4" id="provice-select-container" style="display:none;">
+                    <label for="inputProvince">Province</label>
+                    <select id="inputProvince" class="form-control" name="Province">
+                        <option selected id="default" value="default">Choose...</option>
+                        <option id="EC" value="EC">Eastern Cape (EC)</option>
+                        <option id="FS" value="FS">Free State (FS)</option>
+                        <option id="GP" value="GP">Gauteng (GP)</option>
+                        <option id="KZN" value="KZN">KwaZulu-Natal (KZN)</option>
+                        <option id="LP" value="LP">Limpopo (LP)</option>
+                        <option id="MP" value="MP">Mpumalanga (MP)</option>
+                        <option id="NC" value="NC">Northern Cape (NC)</option>
+                        <option id="NW" value="NW">North West (NW)</option>
+                        <option id="WC" value="WC">Western Cape (WC)</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4" id="state-select-container">
+                    <label for="inputState">State</label>
+                    <select id="inputState" class="form-control" name="State">
+                        <option selected id="default" value="default">Choose...</option>
+                        <option id="AL" value="AL">Alabama (AL)</option>
+                        <option id="AK" value="AK">Alaska (AK)</option>
+                        <option id="AZ" value="AZ">Arizona (AZ)</option>
+                        <option id="AR" value="AR">Arkansas (AR)</option>
+                        <option id="CA" value="CA">California (CA)</option>
+                        <option id="CO" value="CO">Colorado (CO)</option>
+                        <option id="CT" value="CT">Connecticut (CT)</option>
+                        <option id="DE" value="DE">Delaware (DE)</option>
+                        <option id="FL" value="FL">Florida (FL)</option>
+                        <option id="GA" value="GA">Georgia (GA)</option>
+                        <option id="HI" value="HI">Hawaii (HI)</option>
+                        <option id="ID" value="ID">Idaho (ID)</option>
+                        <option id="IL" value="IL">Illinois (IL)</option>
+                        <option id="IN" value="IN">Indiana (IN)</option>
+                        <option id="IA" value="IA">Iowa (IA)</option>
+                        <option id="KS" value="KS">Kansas (KS)</option>
+                        <option id="KY" value="KY">Kentucky (KY)</option>
+                        <option id="LA" value="LA">Louisiana (LA)</option>
+                        <option id="ME" value="ME">Maine (ME)</option>
+                        <option id="MD" value="MD">Maryland (MD)</option>
+                        <option id="MA" value="MA">Massachusetts (MA)</option>
+                        <option id="MI" value="MI">Michigan (MI)</option>
+                        <option id="MN" value="MN">Minnesota (MN)</option>
+                        <option id="MS" value="MS">Mississippi (MS)</option>
+                        <option id="MO" value="MO">Missouri (MO)</option>
+                        <option id="MT" value="MT">Montana (MT)</option>
+                        <option id="NE" value="NE">Nebraska (NE)</option>
+                        <option id="NV" value="NV">Nevada (NV)</option>
+                        <option id="NH" value="NH">New Hampshire (NH)</option>
+                        <option id="NJ" value="NJ">New Jersey (NJ)</option>
+                        <option id="NM" value="NM">New Mexico (NM)</option>
+                        <option id="NY" value="NY">New York (NY)</option>
+                        <option id="NC" value="NC">North Carolina (NC)</option>
+                        <option id="ND" value="ND">North Dakota (ND)</option>
+                        <option id="OH" value="OH">Ohio (OH)</option>
+                        <option id="OK" value="OK">Oklahoma (OK)</option>
+                        <option id="OR" value="OR">Oregon (OR)</option>
+                        <option id="PA" value="PA">Pennsylvania (PA)</option>
+                        <option id="RI" value="RI">Rhode Island (RI)</option>
+                        <option id="SC" value="SC">South Carolina (SC)</option>
+                        <option id="SD" value="SD">South Dakota (SD)</option>
+                        <option id="TN" value="TN">Tennessee (TN)</option>
+                        <option id="TX" value="TX">Texas (TX)</option>
+                        <option id="UT" value="UT">Utah (UT)</option>
+                        <option id="VT" value="VT">Vermont (VT)</option>
+                        <option id="VA" value="VA">Virginia (VA)</option>
+                        <option id="WA" value="WA">Washington (WA)</option>
+                        <option id="WV" value="WV">West Virginia (WV)</option>
+                        <option id="WI" value="WI">Wisconsin (WI)</option>
+                        <option id="WY" value="WY">Wyoming (WY)</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="inputZip">Zip</label>
+                    <input type="text" class="form-control" id="inputZip" name="Zip">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" id="buyer-reg-btn">Register</button>
+        </form>
+    </div>
+    <div id="seller-form" style="display:none;">
+        <form method="post" action="@Url.Action("RegisterSeller", "Home")">
+            <h3>Register as a Seller</h3>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputEmail">Email</label>
+                    <input type="email" class="form-control" id="inputEmail"  name="Email" placeholder="Email">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputPhone">Phone Number</label>
+                    <input type="text" class="form-control" id="inputPhone" name="PhoneNumber" placeholder="Phone Number">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputName">Store Name</label>
+                    <input type="text" class="form-control" id="inputName" name="StoreName" placeholder="Store Name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputStreet">Street Address</label>
+                <input type="text" class="form-control" id="inputStreet" name="StreetAddress">
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputCity">City</label>
+                    <input type="text" class="form-control" id="inputCity" name="City">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputCountry2">Country</label>
+                    <select id="inputCountry2" class="form-control" name="Country">
+                        <option id="USA" selected>United States</option>
+                        <option id="SA">South Africa</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4" id="provice-select-container-2" style="display:none;">
+                    <label for="inputProvince">Province</label>
+                    <select id="inputProvince" class="form-control" name="Province">
+                        <option selected id="default" value="default">Choose...</option>
+                        <option id="EC" value="EC">Eastern Cape (EC)</option>
+                        <option id="FS" value="FS">Free State (FS)</option>
+                        <option id="GP" value="GP">Gauteng (GP)</option>
+                        <option id="KZN" value="KZN">KwaZulu-Natal (KZN)</option>
+                        <option id="LP" value="LP">Limpopo (LP)</option>
+                        <option id="MP" value="MP">Mpumalanga (MP)</option>
+                        <option id="NC" value="NC">Northern Cape (NC)</option>
+                        <option id="NW" value="NW">North West (NW)</option>
+                        <option id="WC" value="WC">Western Cape (WC)</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4" id="state-select-container-2">
+                    <label for="inputState">State</label>
+                    <select id="inputState" class="form-control" name="State">
+                        <option selected id="default" value="default">Choose...</option>
+                        <option id="AL" value="AL">Alabama (AL)</option>
+                        <option id="AK" value="AK">Alaska (AK)</option>
+                        <option id="AZ" value="AZ">Arizona (AZ)</option>
+                        <option id="AR" value="AR">Arkansas (AR)</option>
+                        <option id="CA" value="CA">California (CA)</option>
+                        <option id="CO" value="CO">Colorado (CO)</option>
+                        <option id="CT" value="CT">Connecticut (CT)</option>
+                        <option id="DE" value="DE">Delaware (DE)</option>
+                        <option id="FL" value="FL">Florida (FL)</option>
+                        <option id="GA" value="GA">Georgia (GA)</option>
+                        <option id="HI" value="HI">Hawaii (HI)</option>
+                        <option id="ID" value="ID">Idaho (ID)</option>
+                        <option id="IL" value="IL">Illinois (IL)</option>
+                        <option id="IN" value="IN">Indiana (IN)</option>
+                        <option id="IA" value="IA">Iowa (IA)</option>
+                        <option id="KS" value="KS">Kansas (KS)</option>
+                        <option id="KY" value="KY">Kentucky (KY)</option>
+                        <option id="LA" value="LA">Louisiana (LA)</option>
+                        <option id="ME" value="ME">Maine (ME)</option>
+                        <option id="MD" value="MD">Maryland (MD)</option>
+                        <option id="MA" value="MA">Massachusetts (MA)</option>
+                        <option id="MI" value="MI">Michigan (MI)</option>
+                        <option id="MN" value="MN">Minnesota (MN)</option>
+                        <option id="MS" value="MS">Mississippi (MS)</option>
+                        <option id="MO" value="MO">Missouri (MO)</option>
+                        <option id="MT" value="MT">Montana (MT)</option>
+                        <option id="NE" value="NE">Nebraska (NE)</option>
+                        <option id="NV" value="NV">Nevada (NV)</option>
+                        <option id="NH" value="NH">New Hampshire (NH)</option>
+                        <option id="NJ" value="NJ">New Jersey (NJ)</option>
+                        <option id="NM" value="NM">New Mexico (NM)</option>
+                        <option id="NY" value="NY">New York (NY)</option>
+                        <option id="NC" value="NC">North Carolina (NC)</option>
+                        <option id="ND" value="ND">North Dakota (ND)</option>
+                        <option id="OH" value="OH">Ohio (OH)</option>
+                        <option id="OK" value="OK">Oklahoma (OK)</option>
+                        <option id="OR" value="OR">Oregon (OR)</option>
+                        <option id="PA" value="PA">Pennsylvania (PA)</option>
+                        <option id="RI" value="RI">Rhode Island (RI)</option>
+                        <option id="SC" value="SC">South Carolina (SC)</option>
+                        <option id="SD" value="SD">South Dakota (SD)</option>
+                        <option id="TN" value="TN">Tennessee (TN)</option>
+                        <option id="TX" value="TX">Texas (TX)</option>
+                        <option id="UT" value="UT">Utah (UT)</option>
+                        <option id="VT" value="VT">Vermont (VT)</option>
+                        <option id="VA" value="VA">Virginia (VA)</option>
+                        <option id="WA" value="WA">Washington (WA)</option>
+                        <option id="WV" value="WV">West Virginia (WV)</option>
+                        <option id="WI" value="WI">Wisconsin (WI)</option>
+                        <option id="WY" value="WY">Wyoming (WY)</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="inputZip">Zip</label>
+                    <input type="text" class="form-control" id="inputZip" name="Zip">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+    </div>
+
+    <div id="both-form" style="display:none;">
+        <form method="post" action="@Url.Action("RegisterBuyerSeller", "Home")">
+            <h3>Register as Buyser & Seller</h3>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputEmail">Email</label>
+                    <input type="email" class="form-control" id="inputEmail"  name="Email" placeholder="Email">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputPhone">Phone Number</label>
+                    <input type="text" class="form-control" id="inputPhone" name="PhoneNumber" placeholder="Phone Number">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputFirst">First Name</label>
+                    <input type="text" class="form-control" id="inputFirst" placeholder="First Name" name="FirstName">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputLastName">Last Name</label>
+                    <input type="text" class="form-control" id="inputLastName" name="LastName" placeholder="Last Name">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputName">Store Name</label>
+                    <input type="text" class="form-control" id="inputName" placeholder="Store Name" name="StoreName">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputStreet">Street Address</label>
+                <input type="text" class="form-control" id="inputStreet" name="StreetAddress">
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputCity">City</label>
+                    <input type="text" class="form-control" id="inputCity" name="City">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputCountry3">Country</label>
+                    <select id="inputCountry3" class="form-control" name="Country">
+                        <option id="USA" selected>United States</option>
+                        <option id="SA">South Africa</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4" id="provice-select-container-3" style="display:none;">
+                    <label for="inputProvince">Province</label>
+                    <select id="inputProvince" class="form-control" name="Province">
+                        <option selected id="default" value="default">Choose...</option>
+                        <option id="EC" value="EC">Eastern Cape (EC)</option>
+                        <option id="FS" value="FS">Free State (FS)</option>
+                        <option id="GP" value="GP">Gauteng (GP)</option>
+                        <option id="KZN" value="KZN">KwaZulu-Natal (KZN)</option>
+                        <option id="LP" value="LP">Limpopo (LP)</option>
+                        <option id="MP" value="MP">Mpumalanga (MP)</option>
+                        <option id="NC" value="NC">Northern Cape (NC)</option>
+                        <option id="NW" value="NW">North West (NW)</option>
+                        <option id="WC" value="WC">Western Cape (WC)</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4" id="state-select-container-3">
+                    <label for="inputState">State</label>
+                    <select id="inputState" class="form-control" name="State">
+                        <option selected id="default" value="default">Choose...</option>
+                        <option id="AL" value="AL">Alabama (AL)</option>
+                        <option id="AK" value="AK">Alaska (AK)</option>
+                        <option id="AZ" value="AZ">Arizona (AZ)</option>
+                        <option id="AR" value="AR">Arkansas (AR)</option>
+                        <option id="CA" value="CA">California (CA)</option>
+                        <option id="CO" value="CO">Colorado (CO)</option>
+                        <option id="CT" value="CT">Connecticut (CT)</option>
+                        <option id="DE" value="DE">Delaware (DE)</option>
+                        <option id="FL" value="FL">Florida (FL)</option>
+                        <option id="GA" value="GA">Georgia (GA)</option>
+                        <option id="HI" value="HI">Hawaii (HI)</option>
+                        <option id="ID" value="ID">Idaho (ID)</option>
+                        <option id="IL" value="IL">Illinois (IL)</option>
+                        <option id="IN" value="IN">Indiana (IN)</option>
+                        <option id="IA" value="IA">Iowa (IA)</option>
+                        <option id="KS" value="KS">Kansas (KS)</option>
+                        <option id="KY" value="KY">Kentucky (KY)</option>
+                        <option id="LA" value="LA">Louisiana (LA)</option>
+                        <option id="ME" value="ME">Maine (ME)</option>
+                        <option id="MD" value="MD">Maryland (MD)</option>
+                        <option id="MA" value="MA">Massachusetts (MA)</option>
+                        <option id="MI" value="MI">Michigan (MI)</option>
+                        <option id="MN" value="MN">Minnesota (MN)</option>
+                        <option id="MS" value="MS">Mississippi (MS)</option>
+                        <option id="MO" value="MO">Missouri (MO)</option>
+                        <option id="MT" value="MT">Montana (MT)</option>
+                        <option id="NE" value="NE">Nebraska (NE)</option>
+                        <option id="NV" value="NV">Nevada (NV)</option>
+                        <option id="NH" value="NH">New Hampshire (NH)</option>
+                        <option id="NJ" value="NJ">New Jersey (NJ)</option>
+                        <option id="NM" value="NM">New Mexico (NM)</option>
+                        <option id="NY" value="NY">New York (NY)</option>
+                        <option id="NC" value="NC">North Carolina (NC)</option>
+                        <option id="ND" value="ND">North Dakota (ND)</option>
+                        <option id="OH" value="OH">Ohio (OH)</option>
+                        <option id="OK" value="OK">Oklahoma (OK)</option>
+                        <option id="OR" value="OR">Oregon (OR)</option>
+                        <option id="PA" value="PA">Pennsylvania (PA)</option>
+                        <option id="RI" value="RI">Rhode Island (RI)</option>
+                        <option id="SC" value="SC">South Carolina (SC)</option>
+                        <option id="SD" value="SD">South Dakota (SD)</option>
+                        <option id="TN" value="TN">Tennessee (TN)</option>
+                        <option id="TX" value="TX">Texas (TX)</option>
+                        <option id="UT" value="UT">Utah (UT)</option>
+                        <option id="VT" value="VT">Vermont (VT)</option>
+                        <option id="VA" value="VA">Virginia (VA)</option>
+                        <option id="WA" value="WA">Washington (WA)</option>
+                        <option id="WV" value="WV">West Virginia (WV)</option>
+                        <option id="WI" value="WI">Wisconsin (WI)</option>
+                        <option id="WY" value="WY">Wyoming (WY)</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="inputZip">Zip</label>
+                    <input type="text" class="form-control" id="inputZip" name="Zip">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+    </div>
+
+
+</main>
+
+<script>
+    document.getElementById('inputCountry').addEventListener('change', function () {
+        var country = this.value;
+        
+        var stateSelect = document.getElementById('state-select-container');
+        var provinceSelect = document.getElementById('provice-select-container');
+
+        if (country == 'United States') {
+            stateSelect.style.display = 'block';
+            provinceSelect.style.display = 'none';
+        } else if (country == 'South Africa') {
+            stateSelect.style.display = 'none';
+            provinceSelect.style.display = 'block';
+        } else {
+            stateSelect.style.display = 'none';
+            provinceSelect.style.display = 'none';
+        }
+    });
+
+    document.getElementById('inputCountry2').addEventListener('change', function () {
+        var country = this.value;
+
+        var stateSelect = document.getElementById('state-select-container-2');
+        var provinceSelect = document.getElementById('provice-select-container-2');
+
+        if (country == 'United States') {
+            stateSelect.style.display = 'block';
+            provinceSelect.style.display = 'none';
+        } else if (country == 'South Africa') {
+            stateSelect.style.display = 'none';
+            provinceSelect.style.display = 'block';
+        } else {
+            stateSelect.style.display = 'none';
+            provinceSelect.style.display = 'none';
+        }
+    });
+
+    document.getElementById('inputCountry3').addEventListener('change', function () {
+        var country = this.value;
+
+        var stateSelect = document.getElementById('state-select-container-3');
+        var provinceSelect = document.getElementById('provice-select-container-3');
+
+        if (country == 'United States') {
+            stateSelect.style.display = 'block';
+            provinceSelect.style.display = 'none';
+        } else if (country == 'South Africa') {
+            stateSelect.style.display = 'none';
+            provinceSelect.style.display = 'block';
+        } else {
+            stateSelect.style.display = 'none';
+            provinceSelect.style.display = 'none';
+        }
+    });
+
+   
+    function showForm(formType) {
+            
+        document.getElementById('buyer-form').style.display = 'none';
+        document.getElementById('seller-form').style.display = 'none';
+        document.getElementById('both-form').style.display = 'none';
+
+        if (formType === 'buyer') {
+            document.getElementById('buyer-form').style.display = 'block';
+        } else if (formType === 'seller') {
+            document.getElementById('seller-form').style.display = 'block';
+        } else if (formType === 'both') {
+            document.getElementById('both-form').style.display = 'block';
+            
+        }
+    }
+</script>
+

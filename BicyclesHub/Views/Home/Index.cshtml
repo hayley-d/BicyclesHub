@@ -285,10 +285,11 @@
                 var imageUrl = product.ImageUrl;  
                 var productId = product.Id;      
                 var productUrl = `/Home/Product?id=${productId}`; 
-                categoryHtml += `<div class="card" style="width: 20rem; height: 400px;">
+                categoryHtml += `<div class="card" style="width: 20rem; height: 450px;">
                         <img class="card-img-top category-image" src="${imageUrl}" alt="${product.Name}">
                         <div class="card-body">
                             <h5 class="card-title">${product.Name}</h5>
+                            <p>Sold by ${name}</P>
                             <a href="${productUrl}" class="btn btn-primary">See Product</a>
                         </div>
                     </div>`;
