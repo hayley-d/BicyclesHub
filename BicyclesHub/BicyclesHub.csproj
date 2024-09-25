@@ -128,6 +128,7 @@
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\BikeStoreViewModel.cs" />
     <Compile Include="Models\Brand.cs" />
+    <Compile Include="Models\Buyer.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\CurrentUser.cs" />
     <Compile Include="Models\Customer.cs" />
@@ -212,6 +213,10 @@
     <Content Include="Views\Home\Product.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Home\Buy.cshtml" />
+    <Content Include="Views\Home\Sell.cshtml" />
+    <Content Include="Views\Home\MyBikes.cshtml" />
+    <Content Include="Views\Home\Buyers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Globals\" />

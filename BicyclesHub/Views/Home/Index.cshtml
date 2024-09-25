@@ -8,8 +8,8 @@
             <div class="nav-container">@Html.ActionLink("Register", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</div>
             @if (Model.isLoggedIn())
             {
-                <div class="nav-container">@Html.ActionLink("Sell", "About", "Home", new { area = "" }, new { @class = "nav-link" })</div>
-                <div class="nav-container">@Html.ActionLink("Buy", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</div>
+                <div class="nav-container">@Html.ActionLink("Sellers", "Sellers", "Home", new { area = "" }, new { @class = "nav-link" })</div>
+                <div class="nav-container">@Html.ActionLink("Buyers", "Buyers", "Home", new { area = "" }, new { @class = "nav-link" })</div>
                 <div class="nav-container">@Html.ActionLink("My Bikes", "About", "Home", new { area = "" }, new { @class = "nav-link" })</div>
             }
             <div class="nav-container">@Html.ActionLink("Login", "Login", "Home", new { area = "" }, new { @class = "nav-link" })</div>
@@ -234,6 +234,8 @@
     function displayCategories(brandName) {
         var categories = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetCategoriesPerBrand()));
         var categoryHtml = '';
+        var container = document.getElementById('categoriesContainer');
+        container.innerHTML = '';
         if (categories[brandName]) {
             for (var category in categories[brandName]) {
                 var imageUrl = categories[brandName][category].Item1;
@@ -257,6 +259,8 @@
     var storeInfo = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetProductsInStockByStore()));
     var stores = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Stores));
     var storeNames = [];
+    var container = document.getElementById('categoriesContainer');
+    container.innerHTML = '';
     stores.forEach(function (store) {
         if (store.Address.State === storeState) {
             storeNames.push(store.Name);

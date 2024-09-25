@@ -166,12 +166,12 @@
     padding: 10px 20px 10px 20px;
 }
 
-.product-details-container {
+.product-details-container, .buyer-container {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width:100%;
-    justify-content:flex-start;
+    width: 100%;
+    justify-content: flex-start;
 }
 
 .product-image-page{
@@ -187,4 +187,13 @@
 #buyer-form, #seller-form {
     width: 80%;
     padding: 20px;
+}
+
+.buyer-control-container{
+    padding:20px;
+    display:flex;
+    gap:50px;
+    justify-content:center;
+    align-items:center;
+    width:100%;
 }

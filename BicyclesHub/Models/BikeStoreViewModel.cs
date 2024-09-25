@@ -200,6 +200,31 @@ namespace BicyclesHub.Models
             return storeProductMap;
         }
 
+        public List<Buyer> GetBuyers()
+        {
+            return Orders
+                .Where(order => Customers.Any(c => c.Id == order.CustomerId) &&
+                                Stores.Any(s => s.Id == order.StoreId) &&
+                                Staff.Any(staff => staff.Id == order.StaffId))
+                .Select(order =>
+                {
+                    var customer = Customers.First(c => c.Id == order.CustomerId);
+                    var store = Stores.First(s => s.Id == order.StoreId);
+                    var staff = Staff.First(_staff => _staff.Id == order.StaffId);
+
+                    return new Buyer(
+                        customer.Id,
+                        customer.FirstName,
+                        customer.LastName,
+                        store.Name,
+                        store.Address,
+                        staff,
+                        order.OrderDate
+                    );
+                }).ToList();
+        }
+
+
 
 
 

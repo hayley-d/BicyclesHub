@@ -20,6 +20,56 @@ namespace BicyclesHub.Controllers
             return View(bike_store);
         }
 
+        public ActionResult Sell()
+        {
+            // Check if the session is set if not then take them to login page
+            if (Session["user"] != null)
+            {
+                return RedirectToAction("Login");
+            }
+            return View(bike_store);
+        }
+
+        public ActionResult Sellers()
+        {
+            // Check if the session is set if not then take them to login page
+            if (Session["user"] != null)
+            {
+                return RedirectToAction("Login");
+            }
+            return View(bike_store);
+        }
+
+        public ActionResult Buyers()
+        {
+            // Check if the session is set if not then take them to login page
+            if (Session["user"] != null)
+            {
+                return RedirectToAction("Login");
+            }
+            return View(bike_store);
+        }
+
+        public ActionResult Buy()
+        {
+            // Check if the session is set if not then take them to login page
+            if (Session["user"] != null)
+            {
+                return RedirectToAction("Login");
+            }
+            return View(bike_store);
+        }
+
+        public ActionResult MyBikes()
+        {
+            // Check if the session is set if not then take them to login page
+            if (Session["user"] != null)
+            {
+                return RedirectToAction("Login");
+            }
+            return View(bike_store);
+        }
+
         public ActionResult Register()
         {
             ViewBag.Message = "Your application description page.";
