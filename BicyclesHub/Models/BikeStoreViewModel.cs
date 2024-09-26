@@ -385,6 +385,21 @@ namespace BicyclesHub.Models
         }
 
 
+        public List<Product> FuzzySearch(string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return new List<Product>();
+            }
+
+            // Perform the fuzzy search
+            var results = Products
+                .Where(p => p.Name.ToLower().Contains(searchTerm.ToLower()) ||
+                             p.BrandName.ToLower().Contains(searchTerm.ToLower())) 
+                .ToList();
+
+            return results;
+        }
 
 
 

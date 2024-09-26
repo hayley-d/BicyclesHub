@@ -85,20 +85,59 @@ namespace BicyclesHub.Controllers
         }
 
 
-        public ActionResult Buyers()
+        public ActionResult Buyers(string country = "United States", string state = "", string year = "", int month = -1)
         {
             // Check if the session is set if not then take them to login page
             if (Session["user"] == null)
             {
                 return RedirectToAction("Login");
             }
+            // get the distinct years for the years dropdown options
+            List<int> years = bike_store.GetDistinctOrderYears();
+            ViewBag.DistinctYears = years;
 
-            ViewBag.DistinctYears = bike_store.GetDistinctOrderYears();
+            //get the different locations for the location options
             ViewBag.States = bike_store.GetStates();
+
+            //get the buyers
+            var buyers = bike_store.GetBuyers();
+
+            //Store the current selected country
+            ViewBag.Country = country;
+
+            if (year != "")
+            {
+                buyers = buyers.Where(s => s.OrderDate.Year.ToString() == year).ToList();
+            }
+
+            if (state != "")
+            {
+                buyers = buyers.Where(s => s.StoreAddress.State == state).ToList();
+            }
+
+            if (month != -1)
+            {
+                buyers = buyers.Where(s => s.OrderDate.Month == month).ToList();
+            }
+
+            ViewBag.Buyers = buyers;
             return View(bike_store);
         }
 
-        
+        [HttpPost]
+        public ActionResult BuyerSearch(string Country, string State, string Year, int? Month)
+        {
+            return RedirectToAction("Buyers",
+                    new
+                    {
+                        country = Country,
+                        state = string.IsNullOrEmpty(State) ? "" : State,
+                        year = string.IsNullOrEmpty(Year) ? "" : Year,
+                        month = (Month.HasValue && Month.Value != 0) ? Month.Value : -1
+                    });
+        }
+
+
 
         public ActionResult MyBikes()
         {
@@ -107,7 +146,25 @@ namespace BicyclesHub.Controllers
             {
                 return RedirectToAction("Login");
             }
-            return View(bike_store);
+            List<Product> myProducts = new List<Product>();
+            if (Convert.ToBoolean(Session["IsCustomer"]))
+            {
+                int customerId = Convert.ToInt32(Session["user"]);
+                // Get all order items for the given customer
+                var customerOrderItems = bike_store.OrderItems.Where(oi => oi.OrderId == customerId).ToList();
+                // Retrieve products based on the ProductId from order items
+                myProducts = bike_store.Products.Where(p => customerOrderItems.Any(oi => oi.ProductId == p.Id)).ToList();
+            }
+            else
+            {
+                int storeId = Convert.ToInt32(Session["user"]);
+                var storeOrders = bike_store.Orders.Where(o => o.StoreId == storeId).Select(o => o.Id).ToList();
+                // Filter order items based on the store's order IDs
+                var itemsSold = bike_store.OrderItems.Where(oi => storeOrders.Contains(oi.OrderId)).ToList();
+                myProducts = bike_store.Products.Where(p => itemsSold.Any(oi => oi.ProductId == p.Id)).ToList();
+            }
+
+            return View(myProducts);
         }
 
         public ActionResult Register()
@@ -174,6 +231,24 @@ namespace BicyclesHub.Controllers
         }
 
         public ActionResult Product(int id)
+        {
+            var product = bike_store.GetProductById(id);
+            product.getBrandName();
+            product.getCategoryName();
+            product.getImageUrl();
+
+            if (product == null)
+            {
+                product = new Product(-1, "Not Found", -1, -1, 000, 0);
+                product.setBrandName("Not Found");
+                product.setCategoryName("Not Found");
+                product.setImageUrl("https://pbs.twimg.com/media/C5OTOt3UEAAExIk.jpg");
+            }
+
+            return View(product);
+        }
+
+        public ActionResult ProductView(int id)
         {
             var product = bike_store.GetProductById(id);
             product.getBrandName();
@@ -595,6 +670,21 @@ namespace BicyclesHub.Controllers
 
             return View(filteredProducts);
         }
+
+        [HttpPost]
+        public ActionResult SearchResults(string SearchTerm)
+        {
+            Debug.WriteLine(SearchTerm);
+            return RedirectToAction("SearchProducts", new { searchTerm = SearchTerm });
+        }
+
+        public ActionResult SearchProducts(string searchTerm)
+        {
+            searchTerm = searchTerm.Trim();
+            var results = bike_store.FuzzySearch(searchTerm);
+            return View(results);
+        }
+
 
 
     }
