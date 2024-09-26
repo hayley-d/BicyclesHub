@@ -1,0 +1,270 @@
+﻿
+@{
+    ViewBag.Title = "Seller";
+}
+
+<div class="buyer-container">
+    <div class="buyer-control-container">
+        <div style="width:20vw;">
+            <div class="form-group">
+                <label for="country-select">Filter By Country</label>
+                <select class="custom-select" id="country-select">
+                    <option selected id="default" value="default">Choose...</option>
+                    <option value="United States">United States</option>
+                    <option value="South Africa">South Africa</option>
+                </select>
+            </div>
+        </div>
+        <div id="province-filter" style="display: none; width: 20vw;">
+            <div class="form-group">
+                <label for="province-select">Filter By <span>Province</span></label>
+                <select class="custom-select" id="province-select">
+                    <option selected id="default" value="default">Choose...</option>
+                    <option id="EC" value="EC">Eastern Cape (EC)</option>
+                    <option id="FS" value="FS">Free State (FS)</option>
+                    <option id="GP" value="GP">Gauteng (GP)</option>
+                    <option id="KZN" value="KZN">KwaZulu-Natal (KZN)</option>
+                    <option id="LP" value="LP">Limpopo (LP)</option>
+                    <option id="MP" value="MP">Mpumalanga (MP)</option>
+                    <option id="NC" value="NC">Northern Cape (NC)</option>
+                    <option id="NW" value="NW">North West (NW)</option>
+                    <option id="WC" value="WC">Western Cape (WC)</option>
+                </select>
+            </div>
+        </div>
+        <div id="state-filter" style="display: none; width: 20vw;">
+            <div class="form-group">
+                <label for="state-select">Filter By <span>State</span></label>
+                <select class="custom-select" id="state-select">
+                    <option selected id="default" value="default">Choose...</option>
+                    <option id="AL" value="AL">Alabama (AL)</option>
+                    <option id="AK" value="AK">Alaska (AK)</option>
+                    <option id="AZ" value="AZ">Arizona (AZ)</option>
+                    <option id="AR" value="AR">Arkansas (AR)</option>
+                    <option id="CA" value="CA">California (CA)</option>
+                    <option id="CO" value="CO">Colorado (CO)</option>
+                    <option id="CT" value="CT">Connecticut (CT)</option>
+                    <option id="DE" value="DE">Delaware (DE)</option>
+                    <option id="FL" value="FL">Florida (FL)</option>
+                    <option id="GA" value="GA">Georgia (GA)</option>
+                    <option id="HI" value="HI">Hawaii (HI)</option>
+                    <option id="ID" value="ID">Idaho (ID)</option>
+                    <option id="IL" value="IL">Illinois (IL)</option>
+                    <option id="IN" value="IN">Indiana (IN)</option>
+                    <option id="IA" value="IA">Iowa (IA)</option>
+                    <option id="KS" value="KS">Kansas (KS)</option>
+                    <option id="KY" value="KY">Kentucky (KY)</option>
+                    <option id="LA" value="LA">Louisiana (LA)</option>
+                    <option id="ME" value="ME">Maine (ME)</option>
+                    <option id="MD" value="MD">Maryland (MD)</option>
+                    <option id="MA" value="MA">Massachusetts (MA)</option>
+                    <option id="MI" value="MI">Michigan (MI)</option>
+                    <option id="MN" value="MN">Minnesota (MN)</option>
+                    <option id="MS" value="MS">Mississippi (MS)</option>
+                    <option id="MO" value="MO">Missouri (MO)</option>
+                    <option id="MT" value="MT">Montana (MT)</option>
+                    <option id="NE" value="NE">Nebraska (NE)</option>
+                    <option id="NV" value="NV">Nevada (NV)</option>
+                    <option id="NH" value="NH">New Hampshire (NH)</option>
+                    <option id="NJ" value="NJ">New Jersey (NJ)</option>
+                    <option id="NM" value="NM">New Mexico (NM)</option>
+                    <option id="NY" value="NY">New York (NY)</option>
+                    <option id="NC" value="NC">North Carolina (NC)</option>
+                    <option id="ND" value="ND">North Dakota (ND)</option>
+                    <option id="OH" value="OH">Ohio (OH)</option>
+                    <option id="OK" value="OK">Oklahoma (OK)</option>
+                    <option id="OR" value="OR">Oregon (OR)</option>
+                    <option id="PA" value="PA">Pennsylvania (PA)</option>
+                    <option id="RI" value="RI">Rhode Island (RI)</option>
+                    <option id="SC" value="SC">South Carolina (SC)</option>
+                    <option id="SD" value="SD">South Dakota (SD)</option>
+                    <option id="TN" value="TN">Tennessee (TN)</option>
+                    <option id="TX" value="TX">Texas (TX)</option>
+                    <option id="UT" value="UT">Utah (UT)</option>
+                    <option id="VT" value="VT">Vermont (VT)</option>
+                    <option id="VA" value="VA">Virginia (VA)</option>
+                    <option id="WA" value="WA">Washington (WA)</option>
+                    <option id="WV" value="WV">West Virginia (WV)</option>
+                    <option id="WI" value="WI">Wisconsin (WI)</option>
+                    <option id="WY" value="WY">Wyoming (WY)</option>
+                </select>
+            </div>
+        </div>
+        <div style="width:20vw;">
+            <div class="form-group">
+                <label for="year-select">Filter By Year</label>
+                <select class="custom-select" id="year-select">
+                    <option selected value="default">Choose...</option>
+                    @{
+                        var years = new HashSet<int>();
+                    }
+                    @foreach (var buyer in Model.GetSellers())
+                    {
+                        var year = buyer.OrderDate.Year;
+                        if (!years.Contains(year))
+                        {
+                            years.Add(year);
+                            <option value="@year">@year</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="month-select">Filter By Month</label>
+                <select class="custom-select" id="month-select">
+                    <option selected value="default">Choose...</option>
+                    <option id="1" value="1">Jan</option>
+                    <option id="2" value="2">Feb</option>
+                    <option id="3" value="3">Mar</option>
+                    <option id="4" value="4">Apr</option>
+                    <option id="5" value="5">May</option>
+                    <option id="6" value="6">Jun</option>
+                    <option id="7" value="7">Jul</option>
+                    <option id="8" value="8">Aug</option>
+                    <option id="9" value="9">Sep</option>
+                    <option id="10" value="10">Oct</option>
+                    <option id="11" value="11">Nov</option>
+                    <option id="12" value="12">Dec</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div style="display:flex; justify-content:center; align-items:center;">
+            <div class="msg-container">
+                <div class="categories-container" id="categoriesContainer">
+                    <!-- Sellers will be displayed here -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    var selectedYear = null;
+    var selectedMonth = null;
+    var selectedLocation = null;
+
+    document.getElementById('country-select').addEventListener('change', function () {
+        var country = this.value;
+
+        var stateSelect = document.getElementById('state-filter');
+        var provinceSelect = document.getElementById('province-filter');
+
+        if (country === 'United States') {
+            stateSelect.style.display = 'block';
+            provinceSelect.style.display = 'none';
+        } else if (country === 'South Africa') {
+            stateSelect.style.display = 'none';
+            provinceSelect.style.display = 'block';
+        } else {
+            stateSelect.style.display = 'none';
+            provinceSelect.style.display = 'none';
+        }
+    });
+
+    document.getElementById('state-select').addEventListener('change', function () {
+        var selectElement = document.getElementById('state-select');
+        selectedLocation = selectElement.value;
+        selectedLocation = selectedLocation === 'default' ? null : selectedLocation;
+        filterSellers();
+    });
+
+    document.getElementById('province-select').addEventListener('change', function () {
+        var selectElement = document.getElementById('province-select');
+        selectedLocation = selectElement.value;
+        selectedLocation = selectedLocation === 'default' ? null : selectedLocation;
+        filterSellers();
+
+    });
+
+    document.getElementById('month-select').addEventListener('change', function () {
+        var selectElement = document.getElementById('month-select');
+        selectedMonth = selectElement.value;
+        filterSellers();
+    });
+
+    document.getElementById('year-select').addEventListener('change', function () {
+        var selectElement = document.getElementById('year-select');
+        selectedYear = selectElement.value;
+        filterSellers();
+    });
+
+    // Function to filter sellers based on selected filters
+    function filterSellers() {
+        var sellers = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.GetSellers()));
+        var filteredSellers = sellers;
+        // Filter by year
+        if (selectedYear) {
+            filteredSellers = filteredSellers.filter(function (sellers) {
+                return new Date(sellers.OrderDate).getFullYear() == selectedYear;
+            });
+        }
+        // Filter by month
+        if (selectedMonth) {
+            filteredSellers = filteredSellers.filter(function (sellers) {
+                return new Date(sellers.OrderDate).getMonth() + 1 == selectedMonth;
+            });
+        }
+        // Filter by location (state/province)
+        if (selectedLocation) {
+            filteredSellers = filteredSellers.filter(function (sellers) {
+                return sellers.StoreAddress.State == selectedLocation;
+            });
+        }
+
+        displayFilteredSellers(filteredSellers);
+    }
+
+    // Function to display the filtered sellers
+    function displayFilteredSellers(sellers) {
+        var selectElement = document.getElementById('country-select');
+        var country = selectElement.value;
+        var container = document.getElementById('categoriesContainer');
+        container.innerHTML = '';
+
+        if (sellers.length === 0) {
+            container.innerHTML = '<p>No sellers found matching the criteria.</p>';
+        } else {
+            sellers.forEach(function (sellers) {
+                if (country == "United States") {
+                    container.innerHTML += `<div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">${sellers.FirstName} ${sellers.LastName}</h5>
+                                <p class="card-text">Store: ${sellers.StoreName}</p>
+                                <p class="card-text">Location: ${sellers.StoreAddress.State}</p>
+                                <p class="card-text">Order Date: ${new Date(sellers.OrderDate).toLocaleDateString()}</p>
+                                
+                            </div>
+                        </div>`;
+                } else if (country == "South Africa") {
+                    container.innerHTML += `<div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">${sellers.FirstName} ${sellers.LastName}</h5>
+                            <p class="card-text">Store: ${sellers.StoreName}</p>
+                            <p class="card-text">Location: ${sellers.StoreAddress.State}</p>
+                            <p class="card-text">Order Date: ${new Date(sellers.OrderDate).toLocaleDateString()}</p>
+                            <p class="card-text">Sold: ${seller.Product.Name}</p>
+                            <p class="card-text">Sold: ${seller.Product.Name} for ${seller.Product.ListPrice}</p>
+                        </div>
+                    </div>`;
+                }
+                else {
+                    container.innerHTML += `<div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">${sellers.FirstName} ${sellers.LastName}</h5>
+                                <p class="card-text">Store: ${sellers.StoreName}</p>
+                                <p class="card-text">Location: ${sellers.StoreAddress.State}</p>
+                                <p class="card-text">Order Date: ${new Date(sellers.OrderDate).toLocaleDateString()}</p>
+                                
+                            </div>
+                    </div>`;
+                }
+                
+            });
+        }
+    }
+</script>
+
+

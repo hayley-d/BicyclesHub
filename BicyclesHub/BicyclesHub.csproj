@@ -136,6 +136,7 @@
     <Compile Include="Models\Order.cs" />
     <Compile Include="Models\OrderItem.cs" />
     <Compile Include="Models\Product.cs" />
+    <Compile Include="Models\Seller.cs" />
     <Compile Include="Models\Staff.cs" />
     <Compile Include="Models\Stock.cs" />
     <Compile Include="Models\Store.cs" />
@@ -217,6 +218,10 @@
     <Content Include="Views\Home\Sell.cshtml" />
     <Content Include="Views\Home\MyBikes.cshtml" />
     <Content Include="Views\Home\Buyers.cshtml" />
+    <Content Include="Views\Home\Sellers.cshtml" />
+    <Content Include="Views\Home\AddBike.cshtml" />
+    <Content Include="Views\Home\UpdateBike.cshtml" />
+    <Content Include="Views\Home\ViewBikes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Globals\" />

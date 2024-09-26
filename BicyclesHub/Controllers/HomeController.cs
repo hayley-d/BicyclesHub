@@ -23,10 +23,11 @@ namespace BicyclesHub.Controllers
         public ActionResult Sell()
         {
             // Check if the session is set if not then take them to login page
-            if (Session["user"] != null)
+            if (Session["StoreName"] == null)
             {
                 return RedirectToAction("Login");
-            }
+            } 
+            ViewBag.StoreName = Session["StoreName"];
             return View(bike_store);
         }
 
@@ -84,9 +85,53 @@ namespace BicyclesHub.Controllers
             return View();
         }
 
+        public ActionResult AddBike()
+        {
+            if (Session["StoreName"] == null)
+            {
+                return RedirectToAction("Login");
+            }
+            ViewBag.StoreName = Session["StoreName"];
+            Store store = bike_store.Stores.FirstOrDefault(s => s.Name == ViewBag.StoreName);
+            if(store == null)
+            {
+                return RedirectToAction("Login");
+            }
+            ViewBag.BrandNames = bike_store.Brands.Select(b => b.Name).ToList();
+            ViewBag.CategoryNames = bike_store.Categories.Select(b => b.Name).ToList();
+            return View(store);
+        }
+
+        public ActionResult UpdateBike(int productId)
+        {
+            if (Session["StoreName"] == null)
+            {
+                return RedirectToAction("Login");
+            }
+            Product product = bike_store.Products.FirstOrDefault(s => s.Id == productId);
+            product.getBrandName();
+            product.getCategoryName();
+            product.getImageUrl();
+            ViewBag.BrandNames = bike_store.Brands.Select(b => b.Name).ToList();
+            ViewBag.CategoryNames = bike_store.Categories.Select(b => b.Name).ToList();
+            ViewBag.Quantity = bike_store.Stocks
+                .Where(s => s.ProductId == productId)
+                .Select(s => s.Quantity)
+                .FirstOrDefault();
+
+            if (product == null)
+            {
+                return RedirectToAction("Login");
+            }
+            return View(product);
+        }
+
         public ActionResult Product(int id)
         {
             var product = bike_store.GetProductById(id);
+            product.getBrandName();
+            product.getCategoryName();
+            product.getImageUrl();
 
             if (product == null)
             {
@@ -270,15 +315,23 @@ namespace BicyclesHub.Controllers
                         {
                             // Store store owner session variables
                             Session["user"] = storeReader["store_id"];
+                            Session["StoreName"] = storeReader["store_name"];
                             Session["Email"] = storeReader["email"];
                             Session["IsOwner"] = true;
                         }
                     }
                 }
             }
+            Debug.WriteLine(Session["StoreName"] + " is the name");
             // Pass the session variables to the bike_store
-            
-            bike_store.setUser(Convert.ToInt32(Session["user"]), Session["Email"].ToString(),Convert.ToBoolean(Session["IsCustomer"]), Convert.ToBoolean(Session["IsOwner"]));
+            try
+            {
+                bike_store.setUser(Convert.ToInt32(Session["user"]), Session["Email"].ToString(), Convert.ToBoolean(Session["IsCustomer"]), Convert.ToBoolean(Session["IsOwner"]));
+
+            } catch (Exception ex)
+            {
+                return RedirectToAction("Login");
+            }
             return RedirectToAction("Index");
         }
 
@@ -288,6 +341,137 @@ namespace BicyclesHub.Controllers
             return RedirectToAction("Login");
         }
 
+        [HttpPost]
+        public ActionResult DeleteProduct(int productId)
+        {
+            if (Session["user"] == null)
+            {
+                return RedirectToAction("Login");
+            }
+            int storeId = Convert.ToInt32(Session["user"]);
+            try
+            {
+                using (SqlConnection myConnection = new SqlConnection(Globals.ConnectionString))
+                {
+                    string deleteQuery = "DELETE FROM [production].[stocks] WHERE [product_id] = @ProductId AND [store_id] = @StoreId";
+                    using (SqlCommand deleteCommand = new SqlCommand(deleteQuery, myConnection))
+                    {
+                        deleteCommand.Parameters.AddWithValue("@ProductId", productId);
+                        deleteCommand.Parameters.AddWithValue("@StoreId", storeId);
+                        myConnection.Open();
+                        int rowsAffected = deleteCommand.ExecuteNonQuery();
+                        if (rowsAffected > 0)
+                        {
+                            Debug.WriteLine(rowsAffected + " rows affected");
+                            return RedirectToAction("Index");
+                        }
+                        else
+                        {
+                            return RedirectToAction("Sell");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+            bike_store.setStocks();
+            bike_store.setProducts();
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult UpdateProduct(int productId)
+        {
+            if (Session["user"] == null)
+            {
+                return RedirectToAction("Login");
+            }
+            return RedirectToAction("UpdateBike", new { productId = productId });
+        }
+
+        [HttpPost]
+        public ActionResult AddNewProduct(string productName, string brandName, string categoryName, short modelYear, decimal listPrice, int quantity)
+        {
+            int id = -1;
+            string connectionString = Globals.ConnectionString;
+            // Fetch the brand and category objects
+            var brand = bike_store.Brands.FirstOrDefault(b => b.Name == brandName);
+            var category = bike_store.Categories.FirstOrDefault(c => c.Name == categoryName);
+            if (brand == null || category == null)
+            {
+                return RedirectToAction("AddBike");
+            }
+            string insertStockQuery = @"INSERT INTO [production].[stocks] ([store_id],[product_id] ,[quantity])VALUES (@StoreId, @ProductId, @Quantity);";
+            string insertProductQuery = @"INSERT INTO [production].[products] ([product_name],[brand_id],[category_id],[model_year],[list_price]) VALUES(@ProductName, @BrandId, @CategoryId, @ModelYear, @ListPrice);  SELECT SCOPE_IDENTITY();";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand insertCommand = new SqlCommand(insertProductQuery, connection);
+                insertCommand.Parameters.AddWithValue("@ProductName", productName);
+                insertCommand.Parameters.AddWithValue("@BrandId", brand.Id);
+                insertCommand.Parameters.AddWithValue("@CategoryId", category.Id);
+                insertCommand.Parameters.AddWithValue("@ModelYear", modelYear);
+                insertCommand.Parameters.AddWithValue("@ListPrice", listPrice);
+                connection.Open();
+                int productId = Convert.ToInt32(insertCommand.ExecuteScalar());
+                id = productId;
+
+                using (SqlCommand stockCommand = new SqlCommand(insertStockQuery, connection))
+                {
+                    stockCommand.Parameters.AddWithValue("@StoreId", Convert.ToInt32(Session["user"]));
+                    stockCommand.Parameters.AddWithValue("@ProductId", productId);
+                    stockCommand.Parameters.AddWithValue("@Quantity", quantity);
+                    stockCommand.ExecuteNonQuery();
+                }
+            }
+            bike_store.setStocks();
+            bike_store.setProducts();
+            return RedirectToAction("Product", new { id = id });
+        }
+
+        [HttpPost]
+        public ActionResult UpdateBikeProduct(int productId, string productName, string brandName, string categoryName, short modelYear, decimal listPrice, int quantity)
+        {
+            if (Session["user"] == null)
+            {
+                return RedirectToAction("Login");
+            }
+            var brand = bike_store.Brands.FirstOrDefault(b => b.Name == brandName);
+            var category = bike_store.Categories.FirstOrDefault(c => c.Name == categoryName);
+            if (brand == null || category == null)
+            {
+                return RedirectToAction("UpdateBike", new { productId = productId });
+            }
+            string connectionString = Globals.ConnectionString;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string updateProductQuery = @" UPDATE [production].[products] SET [product_name] = @ProductName,[brand_id] = @BrandId, [category_id] = @CategoryId, [model_year] = @ModelYear, [list_price] = @ListPrice WHERE [product_id] = @ProductId;";
+
+                using (SqlCommand updateCommand = new SqlCommand(updateProductQuery, connection))
+                {
+                    updateCommand.Parameters.AddWithValue("@ProductName", productName);
+                    updateCommand.Parameters.AddWithValue("@BrandId", brand.Id);
+                    updateCommand.Parameters.AddWithValue("@CategoryId", category.Id);
+                    updateCommand.Parameters.AddWithValue("@ModelYear", modelYear);
+                    updateCommand.Parameters.AddWithValue("@ListPrice", listPrice);
+                    updateCommand.Parameters.AddWithValue("@ProductId", productId);
+                    updateCommand.ExecuteNonQuery();
+                }
+                string updateStockQuery = @"UPDATE [production].[stocks] SET [quantity] = @Quantity WHERE [store_id] = @StoreId AND [product_id] = @ProductId;";
+                using (SqlCommand stockCommand = new SqlCommand(updateStockQuery, connection))
+                {
+                    stockCommand.Parameters.AddWithValue("@Quantity", quantity);
+                    stockCommand.Parameters.AddWithValue("@StoreId", Convert.ToInt32(Session["user"])); 
+                    stockCommand.Parameters.AddWithValue("@ProductId", productId);
+                    stockCommand.ExecuteNonQuery();
+                }
+            }
+            Debug.WriteLine("Updated " + productId);
+            bike_store.setStocks();
+            bike_store.setProducts();
+            return RedirectToAction("Product", new { id = productId });
+        }
 
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Optimization;
 
 namespace BicyclesHub.Models
 {
@@ -223,6 +224,81 @@ namespace BicyclesHub.Models
                     );
                 }).ToList();
         }
+
+        public List<Seller> GetSellers()
+        {
+            return Stores
+                .SelectMany(store => Customers
+                    .Where(customer => customer.Email == store.Email)
+                    .SelectMany(customer => Orders
+                        .Where(order => order.CustomerId == customer.Id)
+                        .SelectMany(order => OrderItems
+                            .Where(orderItem => orderItem.OrderId == order.Id)
+                            .Select(orderItem => new Seller(
+                                customer.Id,
+                                customer.FirstName,
+                                customer.LastName,
+                                store.Name,
+                                store.Address,
+                                order.OrderDate,
+                                Products.FirstOrDefault(product => product.Id == orderItem.ProductId)
+                            ))
+                        )
+                    )
+                )
+                .ToList();
+        }
+
+        public Dictionary<string, List<Product>> GetProductsByStore()
+        {
+            return Stores.ToDictionary(store => store.Name, store =>
+            {
+                var stockProducts = Stocks
+                    .Where(stock => stock.StoreId == store.Id)
+                    .Select(stock => Products.FirstOrDefault(product => product.Id == stock.ProductId))
+                    .Where(product => product != null)
+                    .ToList();
+                foreach (var product in stockProducts)
+                {
+                    product.BrandName = GetBrandName(product.BrandId);
+                    product.ImageUrl = GetProductImageUrl(product.CategoryId);
+                    product.CategoryName = GetCategoryName(product.CategoryId);
+                }
+
+                // Get products from order items (avoid duplicates)
+               /* var orderProducts = OrderItems
+                    .Where(orderItem => orderItem.ProductId == store.Id)
+                    .Select(orderItem => Products.FirstOrDefault(product => product.Id == orderItem.ProductId))
+                    .Where(product => product != null && !stockProducts.Any(p => p.Id == product.Id))
+                    .ToList();
+                foreach (var product in orderProducts)
+                {
+                    product.BrandName = GetBrandName(product.BrandId);
+                    product.ImageUrl = GetProductImageUrl(product.CategoryId);
+                    product.CategoryName = GetCategoryName(product.CategoryId);
+                }*/
+                return stockProducts;
+            });
+        }
+
+        private string GetBrandName(int brandId)
+        {
+            Brand brand = Brands.FirstOrDefault(b => b.Id == brandId);
+            return brand.Name;
+        }
+
+        private string GetProductImageUrl(int categoryId)
+        {
+            Category category = Categories.FirstOrDefault(b => b.Id == categoryId);
+            return category.ImageUrl;
+        }
+
+        private string GetCategoryName(int categoryId)
+        {
+            Category category = Categories.FirstOrDefault(b => b.Id == categoryId);
+            return category.Name;
+        }
+
 
 
 

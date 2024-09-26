@@ -3,5 +3,49 @@
     ViewBag.Title = "Sell";
 }
 
-<h2>Sell</h2>
+<div class="buyer-control-container">
+    <div>
+        <div>
+            @Html.ActionLink("Add Bike", "AddBike", "Home", new { area = "" }, new { @class = "btn btn-primary" })
+        </div>
+    </div>
+    <div style="width:20vw;">
+        @using (Html.BeginForm("UpdateProduct", "Home", FormMethod.Post))
+        {
+            <div class="form-group">
+                <label for="update-select">Select Product to Update</label>
+                <select class="custom-select" id="update-select" name="productId" required>
+                    @{
+                        var myProducts = Model.GetProductsByStore()[ViewBag.StoreName];
+                    }
+                    @foreach (var product in myProducts)
+                    {
+                        <option value="@product.Id">@product.Name</option>
+                    }
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        }
+    </div>
+    <div style="width:20vw;">
+        @using (Html.BeginForm("DeleteProduct", "Home", FormMethod.Post))
+        {
+            <div class="form-group">
+                <label for="delete-select">Select Product to delete</label>
+                <select class="custom-select" id="delete-select" name="productId" required>
+                    @{
+                        var myProducts = Model.GetProductsByStore()[ViewBag.StoreName];
+                    }
+                    @foreach (var product in myProducts)
+                    {
+                        <option value="@product.Id">@product.Name</option>
+                    }
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        }
+    </div>
+    <div>
+
+    </div>
 

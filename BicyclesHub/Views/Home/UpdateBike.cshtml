@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "Update Bike";
+}
+
+<div class="buyer-control-container">
+    @using (Html.BeginForm("UpdateBikeProduct", "Home", FormMethod.Post))
+    {
+        <input type="hidden" name="ProductId" value="@Model.Id" />
+
+        <div class="form-group">
+            <label for="name">Product Name</label>
+            <input type="text" class="form-control" id="name" value="@Model.Name" name="ProductName" required>
+        </div>
+        <div class="form-group">
+            <label for="brandName">Brand Name</label>
+            <select id="brandName" class="form-control" name="BrandName" required>
+                @foreach (var brand in ViewBag.BrandNames)
+                {
+                    <option value="@brand" @(brand == Model.BrandName ? "selected" : "")>@brand</option>
+                }
+            </select>
+        </div>
+        <div class="form-check">
+            <label for="categoryName">Category Name</label>
+            <select id="categoryName" class="form-control" name="CategoryName" required>
+                @foreach (var category in ViewBag.CategoryNames)
+                {
+                    <option value="@category" @(category == Model.CategoryName ? "selected" : "")>@category</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="model">Product Model Year</label>
+            <input type="number" class="form-control" id="model" value="@Model.ModelYear" name="ModelYear" min="1900" max="2100" required>
+        </div>
+        <div class="form-group">
+            <label for="price">Product List Price</label>
+            <input type="number" class="form-control" id="price" value="@Model.ListPrice" name="ListPrice" step="0.01" required>
+        </div>
+        <div class="form-group">
+            <label for="quantity">Stock Quantity</label>
+            <input type="number" class="form-control" id="quantity" value="@ViewBag.Quantity" name="Quantity" min="1" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+    }
+</div>
