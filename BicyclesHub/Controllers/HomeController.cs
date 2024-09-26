@@ -33,15 +33,57 @@ namespace BicyclesHub.Controllers
             return View(bike_store);
         }
 
-        public ActionResult Sellers()
+        public ActionResult Sellers(string country = "United States", string state = "", string year = "", int month = -1)
         {
             // Check if the session is set if not then take them to login page
             if (Session["user"] == null)
             {
                 return RedirectToAction("Login");
             }
+            // get the distinct years for the years dropdown options
+            List<int> years = bike_store.GetDistinctOrderYears();
+            ViewBag.DistinctYears = years;
+
+            //get the different locations for the location options
+            ViewBag.States = bike_store.GetStates();
+
+            //get the sellers
+            var sellers = bike_store.GetSellers();
+            
+            //Store the current selected country
+            ViewBag.Country = country;
+
+            if(year != "")
+            {
+                sellers = sellers.Where(s => s.OrderDate.Year.ToString() == year).ToList();
+            }
+
+            if(state != "")
+            {
+                sellers = sellers.Where(s => s.StoreAddress.State == state).ToList();
+            }
+
+            if(month != -1)
+            {
+                sellers = sellers.Where(s => s.OrderDate.Month == month).ToList();
+            }
+
+            ViewBag.Sellers = sellers;
             return View(bike_store);
         }
+
+        [HttpPost]
+        public ActionResult SellerSearch(string Country, string State, string Year, int? Month)
+        {
+            return RedirectToAction("Sellers", 
+                    new {
+                        country = Country,
+                        state = string.IsNullOrEmpty(State) ? "" : State, 
+                        year = string.IsNullOrEmpty(Year) ? "" : Year,
+                        month = (Month.HasValue && Month.Value != 0) ? Month.Value : - 1
+                    });
+        }
+
 
         public ActionResult Buyers()
         {
@@ -50,6 +92,9 @@ namespace BicyclesHub.Controllers
             {
                 return RedirectToAction("Login");
             }
+
+            ViewBag.DistinctYears = bike_store.GetDistinctOrderYears();
+            ViewBag.States = bike_store.GetStates();
             return View(bike_store);
         }
 

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Optimization;
 
 namespace BicyclesHub.Models
 {
@@ -20,7 +18,7 @@ namespace BicyclesHub.Models
         public List<Customer> Customers { get; set; }
         public Summary Summary { get; set; }
 
-        public CurrentUser CurrentUser  { get; set; } 
+        public CurrentUser CurrentUser { get; set; }
 
         public BikeStoreViewModel()
         {
@@ -43,7 +41,7 @@ namespace BicyclesHub.Models
 
             setStocks();
             setStores();
-            
+
             setSummary();
             setStaff();
             setCustomers();
@@ -143,18 +141,18 @@ namespace BicyclesHub.Models
                 {
                     if (!result.ContainsKey(brand))
                     {
-                        result[brand] = new Dictionary<string, (string ImageUrl,int ProductId)>();
+                        result[brand] = new Dictionary<string, (string ImageUrl, int ProductId)>();
                     }
 
                     // Add the category name and image URL
-                    result[brand].Add(category.Name, (category.ImageUrl,group.ProductId));
+                    result[brand].Add(category.Name, (category.ImageUrl, group.ProductId));
                 }
             }
 
             return result;
         }
 
-        
+
         public Dictionary<string, string> GetCategoriesByBrand(string brandName)
         {
             var result = new Dictionary<string, string>();
@@ -231,27 +229,47 @@ namespace BicyclesHub.Models
                 }).ToList();
         }
 
+
+        /// <summary>
+        /// Retrieves a list of sellers based on the associated stores, customers, orders, order items, and products.
+        /// </summary>
+        /// <returns>A list of <see cref="Seller"/> objects, each representing a seller associated with a store and customer details.</returns>
         public List<Seller> GetSellers()
         {
-            return Stores
-                .SelectMany(store => Customers
-                    .Where(customer => customer.Email == store.Email)
-                    .SelectMany(customer => Orders
-                        .Where(order => order.CustomerId == customer.Id)
-                        .SelectMany(order => OrderItems
-                            .Where(orderItem => orderItem.OrderId == order.Id)
-                            .Select(orderItem => new Seller(
-                                customer.Id,
-                                customer.FirstName,
-                                customer.LastName,
-                                store.Name,
-                                store.Address,
-                                order.OrderDate,
-                                Products.FirstOrDefault(product => product.Id == orderItem.ProductId)
-                            ))
-                        )
-                    )
+            return Orders 
+                .SelectMany(order =>  //For each order
+                    OrderItems // For each orderItem
+                    .Where(orderItem => orderItem.OrderId == order.Id) // Match OrderItem with Order
+                    .Select(orderItem =>
+                    {
+                        // Find the product of the order item
+                        var product = Products.FirstOrDefault(p => p.Id == orderItem.ProductId);
+                        // Find the store 
+                        var store = Stores.FirstOrDefault(s => s.Id == order.StoreId);
+                        if (store != null && product != null)
+                        {
+                            return new Seller(storeId: store.Id,storeName: store.Name, storeAddress: store.Address, orderDate: order.OrderDate, product: product );
+                        }
+                        return null; 
+                    })
                 )
+                .Where(seller => seller != null) 
+                .ToList(); 
+        }
+
+
+        /// <summary>
+        /// Retrieves a sorted list of distinct years from the order dates of the provided sellers.
+        /// </summary>
+        /// <param name="sellers">The list of sellers.</param>
+        /// <returns>A sorted list of distinct years from the sellers' order dates.</returns>
+        public List<int> GetDistinctOrderYears()
+        {
+            List<Seller> sellers = GetSellers();
+            return sellers
+                .Select(seller => seller.OrderDate.Year)
+                .Distinct()
+                .OrderBy(year => year)
                 .ToList();
         }
 
@@ -295,16 +313,77 @@ namespace BicyclesHub.Models
         public List<Product> GetProductsByStoreId(int storeId)
         {
             var productIdsInStore = Stocks
-                .Where(stock => stock.StoreId == storeId) 
-                .Select(stock => stock.ProductId) 
+                .Where(stock => stock.StoreId == storeId)
+                .Select(stock => stock.ProductId)
                 .ToList();
 
             var productsInStore = Products
-                .Where(product => productIdsInStore.Contains(product.Id)) 
+                .Where(product => productIdsInStore.Contains(product.Id))
                 .ToList();
 
-            return productsInStore; 
+            return productsInStore;
         }
+
+        /// <summary>
+        /// Gets a list of states with their names and abbreviations.
+        /// </summary>
+        /// <returns>A list of State objects containing the name and abbreviation of each state.</returns>
+        public List<State> GetStates()
+        {
+            return new List<State> {
+                new State("Alabama", "AL"),
+                new State("Alaska", "AK"),
+                new State("Arizona", "AZ"),
+                new State("Arkansas", "AR"),
+                new State("California", "CA"),
+                new State("Colorado", "CO"),
+                new State("Connecticut", "CT"),
+                new State("Delaware", "DE"),
+                new State("Florida", "FL"),
+                new State("Georgia", "GA"),
+                new State("Hawaii", "HI"),
+                new State("Idaho", "ID"),
+                new State("Illinois", "IL"),
+                new State("Indiana", "IN"),
+                new State("Iowa", "IA"),
+                new State("Kansas", "KS"),
+                new State("Kentucky", "KY"),
+                new State("Louisiana", "LA"),
+                new State("Maine", "ME"),
+                new State("Maryland", "MD"),
+                new State("Massachusetts", "MA"),
+                new State("Michigan", "MI"),
+                new State("Minnesota", "MN"),
+                new State("Mississippi", "MS"),
+                new State("Missouri", "MO"),
+                new State("Montana", "MT"),
+                new State("Nebraska", "NE"),
+                new State("Nevada", "NV"),
+                new State("New Hampshire", "NH"),
+                new State("New Jersey", "NJ"),
+                new State("New Mexico", "NM"),
+                new State("New York", "NY"),
+                new State("North Carolina", "NC"),
+                new State("North Dakota", "ND"),
+                new State("Ohio", "OH"),
+                new State("Oklahoma", "OK"),
+                new State("Oregon", "OR"),
+                new State("Pennsylvania", "PA"),
+                new State("Rhode Island", "RI"),
+                new State("South Carolina", "SC"),
+                new State("South Dakota", "SD"),
+                new State("Tennessee", "TN"),
+                new State("Texas", "TX"),
+                new State("Utah", "UT"),
+                new State("Vermont", "VT"),
+                new State("Virginia", "VA"),
+                new State("Washington", "WA"),
+                new State("West Virginia", "WV"),
+                new State("Wisconsin", "WI"),
+                new State("Wyoming", "WY")
+            };
+        }
+
 
 
 
