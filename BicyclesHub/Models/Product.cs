@@ -18,6 +18,8 @@ namespace BicyclesHub.Models
         public string CategoryName { get; set; }
         public string ImageUrl { get; set; }
 
+        public int StoreId { get; set; }
+
 
         public Product(int id, string name, int brandId,int categoryId, short modelYear, decimal listPrice)
         {
@@ -27,6 +29,17 @@ namespace BicyclesHub.Models
             CategoryId = categoryId;
             ModelYear = modelYear;
             ListPrice = listPrice;
+        }
+
+        public Product(int id, string name, int brandId, int categoryId, short modelYear, decimal listPrice,int storeId)
+        {
+            Id = id;
+            Name = name;
+            BrandId = brandId;
+            CategoryId = categoryId;
+            ModelYear = modelYear;
+            ListPrice = listPrice;
+            StoreId = storeId;
         }
 
         public void setBrandName(string name)

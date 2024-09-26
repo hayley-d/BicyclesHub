@@ -25,7 +25,13 @@
                     </div>
                 </p>
             </div>
-            <div style="margin-top:20px; margin-left:20px;"><button href="@Url.Action("PurchaceOrder", "Home")" class="btn btn-primary">Buy Bike</button></div>
+            <div style="margin-top:20px; margin-left:20px;">
+                <form action="@Url.Action("AddToCart", "Home")" method="post">
+                    <input type="hidden" name="ProductId" value="@Model.Id" /> 
+                    <input type="hidden" name="StoreId" value="@Model.StoreId" /> 
+                    <button type="submit" class="btn btn-primary">Add To Cart</button>
+                </form>
+            </div>
         </div>
         
     </div>

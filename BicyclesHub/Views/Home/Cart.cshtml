@@ -1,0 +1,34 @@
+﻿
+@{
+    ViewBag.Title = "Cart";
+}
+
+<h2>Cart</h2>
+<div class="cart-container">
+    @foreach (var product in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name" />
+                <div class="card-body">
+                    <h5 class="card-title">@product.Name</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">$@product.ListPrice</h6>
+                    @using (Html.BeginForm("RemoveFromCart", "Home", FormMethod.Post, new { id = "store-form" }))
+                    {
+                        <input type="hidden" name="ProductId" value="@product.Id" />
+                        <button type="submit" class="btn btn-danger">Remove</button>
+                    }
+
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="text-center mt-4">
+        <form asp-action="CreateOrder" method="post">
+            <input type="hidden" name="UserId" value="@ViewBag.User.Id" />
+            <input type="hidden" name="Products" value="@Html.Raw(Json.Encode(Model))" />
+            <button type="submit" class="btn btn-success">Create Order</button>
+        </form>
+    </div>
+</div>

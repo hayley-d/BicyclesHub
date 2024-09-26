@@ -14,7 +14,7 @@ namespace BicyclesHub.Controllers
     public class HomeController : Controller
     {
         SqlConnection myConnection = new SqlConnection(Globals.ConnectionString);
-        
+
         private static BikeStoreViewModel bike_store = new BikeStoreViewModel();
 
         public ActionResult Index()
@@ -28,7 +28,7 @@ namespace BicyclesHub.Controllers
             if (Session["StoreName"] == null)
             {
                 return RedirectToAction("Login");
-            } 
+            }
             ViewBag.StoreName = Session["StoreName"];
             return View(bike_store);
         }
@@ -49,21 +49,21 @@ namespace BicyclesHub.Controllers
 
             //get the sellers
             var sellers = bike_store.GetSellers();
-            
+
             //Store the current selected country
             ViewBag.Country = country;
 
-            if(year != "")
+            if (year != "")
             {
                 sellers = sellers.Where(s => s.OrderDate.Year.ToString() == year).ToList();
             }
 
-            if(state != "")
+            if (state != "")
             {
                 sellers = sellers.Where(s => s.StoreAddress.State == state).ToList();
             }
 
-            if(month != -1)
+            if (month != -1)
             {
                 sellers = sellers.Where(s => s.OrderDate.Month == month).ToList();
             }
@@ -75,12 +75,13 @@ namespace BicyclesHub.Controllers
         [HttpPost]
         public ActionResult SellerSearch(string Country, string State, string Year, int? Month)
         {
-            return RedirectToAction("Sellers", 
-                    new {
+            return RedirectToAction("Sellers",
+                    new
+                    {
                         country = Country,
-                        state = string.IsNullOrEmpty(State) ? "" : State, 
+                        state = string.IsNullOrEmpty(State) ? "" : State,
                         year = string.IsNullOrEmpty(Year) ? "" : Year,
-                        month = (Month.HasValue && Month.Value != 0) ? Month.Value : - 1
+                        month = (Month.HasValue && Month.Value != 0) ? Month.Value : -1
                     });
         }
 
@@ -169,7 +170,7 @@ namespace BicyclesHub.Controllers
 
         public ActionResult Register()
         {
-            
+
 
             return View();
         }
@@ -184,7 +185,7 @@ namespace BicyclesHub.Controllers
 
         public ActionResult Login()
         {
-            
+
 
             return View();
         }
@@ -197,7 +198,7 @@ namespace BicyclesHub.Controllers
             }
             ViewBag.StoreName = Session["StoreName"];
             Store store = bike_store.Stores.FirstOrDefault(s => s.Name == ViewBag.StoreName);
-            if(store == null)
+            if (store == null)
             {
                 return RedirectToAction("Login");
             }
@@ -402,8 +403,8 @@ namespace BicyclesHub.Controllers
         {
             using (SqlConnection myConnection = new SqlConnection(Globals.ConnectionString))
             {
-                Session["IsOwner"] = false; 
-                Session["IsCustomer"] = false; 
+                Session["IsOwner"] = false;
+                Session["IsCustomer"] = false;
 
                 string customerQuery = "SELECT * FROM [sales].[customers] WHERE [email] = @Email AND [phone] = @Phone";
                 using (SqlCommand customerCommand = new SqlCommand(customerQuery, myConnection))
@@ -450,7 +451,8 @@ namespace BicyclesHub.Controllers
             {
                 bike_store.setUser(Convert.ToInt32(Session["user"]), Session["Email"].ToString(), Convert.ToBoolean(Session["IsCustomer"]), Convert.ToBoolean(Session["IsOwner"]));
 
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return RedirectToAction("Login");
             }
@@ -584,7 +586,7 @@ namespace BicyclesHub.Controllers
                 using (SqlCommand stockCommand = new SqlCommand(updateStockQuery, connection))
                 {
                     stockCommand.Parameters.AddWithValue("@Quantity", quantity);
-                    stockCommand.Parameters.AddWithValue("@StoreId", Convert.ToInt32(Session["user"])); 
+                    stockCommand.Parameters.AddWithValue("@StoreId", Convert.ToInt32(Session["user"]));
                     stockCommand.Parameters.AddWithValue("@ProductId", productId);
                     stockCommand.ExecuteNonQuery();
                 }
@@ -625,7 +627,7 @@ namespace BicyclesHub.Controllers
             bike_store.setStores();
             ViewBag.Stores = bike_store.Stores;
             var products = new List<Product>();
-            if(storeId == -1)
+            if (storeId == -1)
             {
                 ViewBag.SelectedStore = bike_store.Stores[0].Name;
                 products = bike_store.GetProductsByStoreId(1);
@@ -633,7 +635,10 @@ namespace BicyclesHub.Controllers
             else
             {
                 ViewBag.SelectedStore = bike_store.Stores.FirstOrDefault(s => s.Id == storeId).Name;
-                products = bike_store.GetProductsByStoreId(storeId);
+                products = bike_store.Products
+                    .Where(p => p.StoreId == storeId)
+                    .ToList();
+
             }
             return View(products);
         }
@@ -641,13 +646,13 @@ namespace BicyclesHub.Controllers
         [HttpPost]
         public ActionResult SortByStore(string storeId)
         {
-            return RedirectToAction("Stores", new {storeId = storeId}); 
+            return RedirectToAction("Stores", new { storeId = storeId });
         }
 
         [HttpPost]
         public ActionResult FilterByPrice(decimal selectedPrice, string currency)
         {
-            return RedirectToAction("Prices", new {selectedPrice = selectedPrice, currency=currency }); 
+            return RedirectToAction("Prices", new { selectedPrice = selectedPrice, currency = currency });
         }
 
         public ActionResult Prices(decimal selectedPrice = 5000, string currency = "usd")
@@ -685,6 +690,42 @@ namespace BicyclesHub.Controllers
             return View(results);
         }
 
+        [HttpPost]
+        public ActionResult AddToCart(int ProductId, int StoreId)
+        {
+            //find product and add to the cart
+            Product product = bike_store.Products.FirstOrDefault(p => p.Id == ProductId && p.StoreId == StoreId);
+            bike_store.Cart.Add(product);
+            Debug.WriteLine(bike_store.Cart.Count);
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Cart()
+        {
+            if (Session["user"] == null)
+            {
+                return RedirectToAction("Login");
+            }
+            ViewBag.User = bike_store.Customers.FirstOrDefault(c => c.Id == Convert.ToInt32(Session["user"]));
+
+            return View(bike_store.Cart);
+        }
+
+        [HttpPost]
+        public ActionResult RemoveFromCart(int ProductId)
+        {
+            int productToRemove = bike_store.Cart.FindIndex(p => p.Id == ProductId);
+            bike_store.Cart.RemoveAt(productToRemove);
+            return RedirectToAction("Cart");
+        }
+
+        [HttpPost]
+        public ActionResult CreateOrder(int UserId, List<Product> Products)
+        {
+
+
+            return RedirectToAction("OrderConfirmation");
+        }
 
 
     }

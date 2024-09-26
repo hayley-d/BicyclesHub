@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -20,31 +21,23 @@ namespace BicyclesHub.Models
 
         public CurrentUser CurrentUser { get; set; }
 
+        public List<Product> Cart = new List<Product>();
+
         public BikeStoreViewModel()
         {
             setBrands();
             setCategory();
             setOrders();
             setOrderItems();
-
-            setProducts();
-
-            //set product details
-            foreach (Product p in Products)
-            {
-                var brand = Brands.FirstOrDefault(b => b.Id == p.BrandId);
-                var category = Categories.FirstOrDefault(b => b.Id == p.CategoryId);
-                p.setBrandName(brand?.Name);
-                p.setCategoryName(category?.Name);
-                p.setImageUrl(category?.ImageUrl);
-            }
-
             setStocks();
             setStores();
-
             setSummary();
             setStaff();
             setCustomers();
+            setProducts();
+
+
+
 
             setUser(-1, "", false, false);
         }
@@ -61,13 +54,25 @@ namespace BicyclesHub.Models
 
         public void setProducts()
         {
-            Products = dataManager.GetAllProducts();
-            foreach (Product p in Products)
+            
+            // Get the products
+            var products = dataManager.GetAllProducts();
+
+            var productsInStock = (from stock in Stocks
+                                   where stock.Quantity > 0 // Only consider stocks with quantity greater than 0
+                                   join product in products on stock.ProductId equals product.Id
+                                   select new Product(product.Id, product.Name, product.BrandId, product.CategoryId, product.ModelYear, product.ListPrice, stock.StoreId))
+                                    .ToList();
+            //set product details
+            foreach (Product p in productsInStock)
             {
                 p.BrandName = GetBrandName(p.BrandId);
                 p.ImageUrl = GetProductImageUrl(p.CategoryId);
                 p.CategoryName = GetProductImageUrl(p.CategoryId);
             }
+
+
+            Products = productsInStock;
         }
 
         public void setOrderItems()

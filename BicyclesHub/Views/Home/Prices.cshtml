@@ -83,13 +83,13 @@
 
     priceRangeInput.addEventListener('input', function () {
         var selectedPrice = this.value;
-        hiddenPriceInput.value = selectedPrice; // This keeps the original value (USD)
+        hiddenPriceInput.value = selectedPrice; 
         updatePriceDisplay(selectedPrice);
     });
 
     currencyToggle.addEventListener('change', function () {
         currencyTextSymbol.innerText = this.value === "usd" ? "$" : "R";
-        updatePriceDisplay(priceRangeInput.value); // Update display based on the new currency
+        updatePriceDisplay(priceRangeInput.value); 
     });
 
     // Initialize the display

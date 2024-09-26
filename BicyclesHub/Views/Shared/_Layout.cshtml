@@ -17,8 +17,10 @@
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
         <div class="container nav-bar-contatiner">
             <div class="nav-logo-container">
-                <p class="logo-heading">Bicycles-Hub</p>
-                <img class="logo-img" alt="bicycle" src="@Url.Content("~/Images/Electra_Cruiser%201.jpeg")" />
+                <a href="@Url.Action("Index", "Home")" style="text-decoration: none; color: inherit;">
+                    <p class="logo-heading">Bicycles-Hub</p>
+                    <img class="logo-img" alt="bicycle" src="@Url.Content("~/Images/Electra_Cruiser%201.jpeg")" />
+                </a>
             </div>
             <!-- Link Area -->
             <div>
@@ -27,11 +29,11 @@
                         <li class="nav-item">
                             @Html.ActionLink("Register", "Register", "Home", new { area = "" }, new { @class = "nav-link" })
                         </li>
-                        <li class="nav-item">
+                        @*<li class="nav-item">
                             @Html.ActionLink("Sell", "Sell", "Home", new { area = "" }, new { @class = "nav-link" })
-                        </li>
+                        </li>*@
                         <li class="nav-item">
-                            @Html.ActionLink("Buy", "ViewBikes", "Home", new { area = "" }, new { @class = "nav-link" })
+                            @Html.ActionLink("Cart", "Cart", "Home", new { area = "" }, new { @class = "nav-link" })
                         </li>
                         <li class="nav-item">
                             @Html.ActionLink("Logout", "Logout", "Home", new { area = "" }, new { @class = "nav-link" })
