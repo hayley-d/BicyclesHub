@@ -222,6 +222,7 @@
     <Content Include="Views\Home\AddBike.cshtml" />
     <Content Include="Views\Home\UpdateBike.cshtml" />
     <Content Include="Views\Home\ViewBikes.cshtml" />
+    <Content Include="Views\Home\Stores.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Globals\" />

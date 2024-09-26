@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Optimization;
 
 namespace BicyclesHub.Controllers
 {
@@ -497,6 +499,31 @@ namespace BicyclesHub.Controllers
                .Where(p => Math.Abs(p.ListPrice - price) <= 500 && p.CategoryName == category).ToList();
             return View(filteredProducts);
         }
+
+        public ActionResult Stores(int storeId = -1)
+        {
+            bike_store.setStores();
+            ViewBag.Stores = bike_store.Stores;
+            var products = new List<Product>();
+            if(storeId == -1)
+            {
+                ViewBag.SelectedStore = bike_store.Stores[0].Name;
+                products = bike_store.GetProductsByStoreId(1);
+            }
+            else
+            {
+                ViewBag.SelectedStore = bike_store.Stores.FirstOrDefault(s => s.Id == storeId).Name;
+                products = bike_store.GetProductsByStoreId(storeId);
+            }
+            return View(products);
+        }
+
+        [HttpPost]
+        public ActionResult SortByStore(string storeId)
+        {
+            return RedirectToAction("Stores", new {storeId = storeId}); 
+        }
+
 
     }
 }

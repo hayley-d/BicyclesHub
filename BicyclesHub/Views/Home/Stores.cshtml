@@ -1,11 +1,23 @@
-﻿
-@{
-    ViewBag.Title = "Similar Bikes";
+﻿@{
+    ViewBag.Title = "Stores";
 }
+
 <div style="display:flex; flex-direction:column; gap:30px; justify-content:center; align-items:center; padding:20px;">
-   <div>
-       <h2>Similar Bikes</h2>
-   </div> 
+    <div>
+        @using (Html.BeginForm("SortByStore", "Home", FormMethod.Post, new { id = "store-form" }))
+        {
+            <div class="form-group">
+                <label for="store-select">Select Store</label>
+                <select class="custom-select" id="store-select" name="storeId">
+                    @foreach (var store in ViewBag.Stores)
+                    {
+                        <option value="@store.Id" @(store.Name == ViewBag.SelectedStore ? "selected" : "")>@store.Name</option>
+                    }
+                </select>
+            </div>
+            <button type="submit" id="view-similar-bikes" class="btn btn-secondary">View</button>
+        }
+    </div>
     <div style="display:flex; justify-content:center; align-items:center;">
         <div class="msg-container">
             <div class="categories-container" id="categoriesContainer">

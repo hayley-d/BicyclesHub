@@ -270,19 +270,6 @@ namespace BicyclesHub.Models
                     product.ImageUrl = GetProductImageUrl(product.CategoryId);
                     product.CategoryName = GetCategoryName(product.CategoryId);
                 }
-
-                // Get products from order items (avoid duplicates)
-               /* var orderProducts = OrderItems
-                    .Where(orderItem => orderItem.ProductId == store.Id)
-                    .Select(orderItem => Products.FirstOrDefault(product => product.Id == orderItem.ProductId))
-                    .Where(product => product != null && !stockProducts.Any(p => p.Id == product.Id))
-                    .ToList();
-                foreach (var product in orderProducts)
-                {
-                    product.BrandName = GetBrandName(product.BrandId);
-                    product.ImageUrl = GetProductImageUrl(product.CategoryId);
-                    product.CategoryName = GetCategoryName(product.CategoryId);
-                }*/
                 return stockProducts;
             });
         }
@@ -305,7 +292,19 @@ namespace BicyclesHub.Models
             return category.Name;
         }
 
+        public List<Product> GetProductsByStoreId(int storeId)
+        {
+            var productIdsInStore = Stocks
+                .Where(stock => stock.StoreId == storeId) 
+                .Select(stock => stock.ProductId) 
+                .ToList();
 
+            var productsInStore = Products
+                .Where(product => productIdsInStore.Contains(product.Id)) 
+                .ToList();
+
+            return productsInStore; 
+        }
 
 
 
