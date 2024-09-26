@@ -111,6 +111,20 @@
                 </select>
             </div>
         </div>
+        <div style="width: 20vw;">
+            <div class="form-group">
+                <label for="price-range">Filter By Price</label>
+                <input type="range" class="form-control-range" id="price-range" min="0" max="5000" step="10">
+                <p>Selected Price Range: <span id="currency-text-symbol">$</span><span id="price-range-value">0</span></p>
+            </div>
+            <div class="form-group">
+                <label for="currency-toggle">Currency</label>
+                <select class="custom-select" id="currency-toggle">
+                    <option value="usd" selected>USD ($)</option>
+                    <option value="zar">ZAR (R)</option>
+                </select>
+            </div>
+        </div>
     </div>
     <div>
         <div style="display:flex; justify-content:center; align-items:center;">
@@ -129,6 +143,9 @@
     var selectedPrice = null;
     var selectedBrand = null;
     var selectedCategory = null;
+    var selectedPrice = 5000; 
+    var selectedCurrency = 'usd';
+    const usdToZarRate = 17.21; 
 
     document.getElementById('country-select').addEventListener('change', function () {
         var country = this.value;
@@ -175,6 +192,23 @@
         filterBikes();
     });
 
+    document.getElementById('price-range').addEventListener('input', function () {
+        selectedPrice = this.value;
+        document.getElementById('price-range-value').innerText = selectedPrice;
+        filterBikes();
+    });
+
+    document.getElementById('currency-toggle').addEventListener('change', function () {
+        var selectElement = document.getElementById('currency-toggle');
+        selectedCurrency = selectElement.value;
+        if (selectedCurrency == "usd") {
+            document.getElementById("currency-text-symbol").innerText = "$";
+        } else {
+            document.getElementById("currency-text-symbol").innerText = "R";
+        }
+        filterBikes();
+    });
+
     // Function to filter buyers based on selected filters
     function filterBikes() {
         var bikes = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Products));
@@ -191,12 +225,27 @@
                 return bike.CategoryName == selectedCategory;
             });
         }
+
         // Filter by location (state/province)
         if (selectedLocation) {
-           /* filteredBikes = filteredBikes.filter(function (bike) {
-                return bike.Address.State == selectedLocation;
-            });*/
+            var stocks = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Stocks)); 
+            var stores = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Stores)); 
+            filteredBikes = filteredBikes.filter(function (bike) {
+                var bikeStocks = stocks.filter(stock => stock.ProductId === bike.Id);
+                return bikeStocks.some(stock => {
+                    var store = stores.find(store => store.Id === stock.StoreId);
+                    return store && store.Address.State === selectedLocation; 
+                });
+            });
         }
+
+        filteredBikes = filteredBikes.filter(function (bike) {
+            var price = bike.ListPrice;
+            if (selectedCurrency === 'zar') {
+                price *= usdToZarRate; // Convert to ZAR
+            }
+            return price <= selectedPrice;
+        });
 
         displayFilteredBikes(filteredBikes);
     }
@@ -206,15 +255,18 @@
         var container = document.getElementById('categoriesContainer');
         container.innerHTML = '';
 
-        if (buyers.length === 0) {
+        if (bikes.length === 0) {
             container.innerHTML = '<p>No bikes found matching the criteria.</p>';
         } else {
-            buyers.forEach(function (bike) {
+            bikes.forEach(function (bike) {
+                var displayPrice = selectedCurrency === 'zar' ? bike.ListPrice * usdToZarRate : bike.ListPrice;
+                var currencySymbol = selectedCurrency === 'zar' ? 'R' : '$';
                 container.innerHTML += `<div class="card" style="width: 20rem; height: 450px;">
                         <img class="card-img-top category-image" src="${bike.ImageUrl}" alt="${bike.Name}">
                         <div class="card-body">
                             <h5 class="card-title">${bike.Name}</h5>
-                            <p>Sold by ${bike.BrandName}</P>
+                            <p>Brand: ${bike.BrandName}</P>
+                            <p>${currencySymbol} ${displayPrice.toFixed(2)}</P>
                             <a href="/Home/Product?id=${bike.Id}" class="btn btn-primary">See Product</a>
                         </div>
                     </div>`;

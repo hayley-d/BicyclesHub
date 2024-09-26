@@ -45,7 +45,25 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         }
     </div>
-    <div>
-
+    <div style="width:20vw;">
+        @using (Html.BeginForm("ViewSimilarBikes", "Home", FormMethod.Post, new { id = "similar-bikes-form" }))
+        {
+            <div class="form-group">
+                <label for="similar-select">Select Product to See Similar Products</label>
+                <select class="custom-select" id="similar-select" name="productId">
+                    @{
+                        var myProducts2 = Model.GetProductsByStore()[ViewBag.StoreName];
+                    }
+                    @foreach (var product in myProducts2)
+                    {
+                        <option value="@product.Id">@product.Name</option>
+                    }
+                </select>
+            </div>
+            <button type="submit" id="view-similar-bikes" class="btn btn-secondary">View</button>
+        }
     </div>
+</div>
+
+
 

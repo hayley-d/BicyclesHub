@@ -214,7 +214,7 @@
     <Content Include="Views\Home\Product.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
-    <Content Include="Views\Home\Buy.cshtml" />
+    <Content Include="Views\Home\SimilarBikes.cshtml" />
     <Content Include="Views\Home\Sell.cshtml" />
     <Content Include="Views\Home\MyBikes.cshtml" />
     <Content Include="Views\Home\Buyers.cshtml" />

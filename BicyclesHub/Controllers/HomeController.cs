@@ -34,7 +34,7 @@ namespace BicyclesHub.Controllers
         public ActionResult Sellers()
         {
             // Check if the session is set if not then take them to login page
-            if (Session["user"] != null)
+            if (Session["user"] == null)
             {
                 return RedirectToAction("Login");
             }
@@ -44,27 +44,19 @@ namespace BicyclesHub.Controllers
         public ActionResult Buyers()
         {
             // Check if the session is set if not then take them to login page
-            if (Session["user"] != null)
+            if (Session["user"] == null)
             {
                 return RedirectToAction("Login");
             }
             return View(bike_store);
         }
 
-        public ActionResult Buy()
-        {
-            // Check if the session is set if not then take them to login page
-            if (Session["user"] != null)
-            {
-                return RedirectToAction("Login");
-            }
-            return View(bike_store);
-        }
+        
 
         public ActionResult MyBikes()
         {
             // Check if the session is set if not then take them to login page
-            if (Session["user"] != null)
+            if (Session["user"] == null)
             {
                 return RedirectToAction("Login");
             }
@@ -73,14 +65,22 @@ namespace BicyclesHub.Controllers
 
         public ActionResult Register()
         {
-            ViewBag.Message = "Your application description page.";
+            
 
             return View();
         }
 
+        public ActionResult ViewBikes()
+        {
+            ViewBag.BrandNames = bike_store.Brands.Select(b => b.Name).ToList();
+            ViewBag.CategoryNames = bike_store.Categories.Select(b => b.Name).ToList();
+
+            return View(bike_store);
+        }
+
         public ActionResult Login()
         {
-            ViewBag.Message = "Your application description page.";
+            
 
             return View();
         }
@@ -471,6 +471,31 @@ namespace BicyclesHub.Controllers
             bike_store.setStocks();
             bike_store.setProducts();
             return RedirectToAction("Product", new { id = productId });
+        }
+
+        [HttpPost]
+        public ActionResult ViewSimilarBikes(int productId)
+        {
+            var product = bike_store.Products.FirstOrDefault(p => p.Id == productId);
+
+            if (product != null)
+            {
+                var price = product.ListPrice;
+                var category = product.CategoryName;
+                return RedirectToAction("SimilarBikes", new { price = price, category = category });
+            }
+            return RedirectToAction("Sell");
+        }
+
+        public ActionResult SimilarBikes(decimal price, string category)
+        {
+            if (Session["user"] == null)
+            {
+                return RedirectToAction("Login");
+            }
+            var filteredProducts = bike_store.Products
+               .Where(p => Math.Abs(p.ListPrice - price) <= 500 && p.CategoryName == category).ToList();
+            return View(filteredProducts);
         }
 
     }

@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Similar Bikes";
+}
+<div class="buyer-container">
+    <h2>Similar Bikes</h2>
+    <div style="display:flex; justify-content:center; align-items:center;">
+        <div class="msg-container">
+            <div class="categories-container" id="categoriesContainer">
+                @foreach (var bike in Model)
+                {
+                    <div class="card" style="width: 20rem; height: 450px;">
+                        <img class="card-img-top category-image" src="@bike.ImageUrl" alt="@bike.Name">
+                        <div class="card-body">
+                            <h5 class="card-title">@bike.Name</h5>
+                            <p>Brand: @bike.BrandName</p>
+                            <p>$ @bike.ListPrice</p>
+                            <a href="/Home/Product?id=@bike.Id" class="btn btn-primary">See Product</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

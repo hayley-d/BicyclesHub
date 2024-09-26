@@ -64,6 +64,12 @@ namespace BicyclesHub.Models
         public void setProducts()
         {
             Products = dataManager.GetAllProducts();
+            foreach (Product p in Products)
+            {
+                p.BrandName = GetBrandName(p.BrandId);
+                p.ImageUrl = GetProductImageUrl(p.CategoryId);
+                p.CategoryName = GetProductImageUrl(p.CategoryId);
+            }
         }
 
         public void setOrderItems()
