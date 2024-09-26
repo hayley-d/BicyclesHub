@@ -524,6 +524,33 @@ namespace BicyclesHub.Controllers
             return RedirectToAction("Stores", new {storeId = storeId}); 
         }
 
+        [HttpPost]
+        public ActionResult FilterByPrice(decimal selectedPrice, string currency)
+        {
+            return RedirectToAction("Prices", new {selectedPrice = selectedPrice, currency=currency }); 
+        }
+
+        public ActionResult Prices(decimal selectedPrice = 5000, string currency = "usd")
+        {
+            ViewBag.Currency = currency;
+            ViewBag.SelectedPrice = selectedPrice;
+            if (currency == "zar")
+            {
+                selectedPrice = Math.Round(selectedPrice / (decimal)17.21, 2); ;
+            }
+            Debug.WriteLine(selectedPrice + " in " + currency);
+
+            var products = bike_store.Products;
+            var filteredProducts = products
+                .Where(p => p.ListPrice <= selectedPrice)
+                .OrderByDescending(p => p.ListPrice)
+                .ToList();
+
+
+
+            return View(filteredProducts);
+        }
+
 
     }
 }

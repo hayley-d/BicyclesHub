@@ -1,0 +1,97 @@
+﻿@{
+    ViewBag.Title = "Prices";
+}
+
+<div class="buyer-container">
+    <div class="buyer-control-container">
+        @using (Html.BeginForm("FilterByPrice", "Home", FormMethod.Post))
+        {
+            <div style="width: 20vw;">
+                <div class="form-group">
+                    <label for="price-range">Filter By Price</label>
+                    <input type="range" class="form-control-range" id="price-range" min="0" max="500" step="10" value="@ViewBag.SelectedPrice" oninput="updatePrice()">
+                    <p>Selected Price Range: <span id="currency-text-symbol">@(ViewBag.Currency == "usd" ? "$" : "R")</span><span id="price-range-value">@ViewBag.SelectedPrice</span></p>
+                    <input type="hidden" name="selectedPrice" id="hidden-price" value="@ViewBag.SelectedPrice">
+                </div>
+                <div class="form-group">
+                    <label for="currency-toggle">Currency</label>
+                    <select class="custom-select" id="currency-toggle" name="currency">
+                        <option value="usd" @(ViewBag.Currency == "usd" ? "selected" : "")>USD ($)</option>
+                        <option value="zar" @(ViewBag.Currency == "zar" ? "selected" : "")>ZAR (R)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Apply Filter</button>
+            </div>
+        }
+    </div>
+
+    <div>
+        <div style="display:flex; justify-content:center; align-items:center;">
+            <div class="msg-container">
+                <div class="categories-container" id="categoriesContainer">
+                    @foreach (var bike in Model)
+                    {
+                        var priceInZar = bike.ListPrice * (decimal)17.21; 
+                        <div class="card" style="width: 20rem; height: 450px;">
+                            <img class="card-img-top category-image" src="@bike.ImageUrl" alt="@bike.Name">
+                            <div class="card-body">
+                                <h5 class="card-title">@bike.Name</h5>
+                                <p>Brand: @bike.BrandName</p>
+                                <p>
+                                    @if (ViewBag.Currency == "usd")
+                                    {
+                                        <text>$ @bike.ListPrice</text>
+                                        
+                                    }
+                                    else
+                                    {
+                                        <text>R @priceInZar.ToString("F2")</text>
+                                        
+                                    }
+                                </p>
+                                <a href="/Home/Product?id=@bike.Id" class="btn btn-primary">See Product</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const usdToZarRate = 17.21;
+    var priceRangeInput = document.getElementById('price-range');
+    var priceRangeValueText = document.getElementById('price-range-value');
+    var currencyToggle = document.getElementById('currency-toggle');
+    var currencyTextSymbol = document.getElementById('currency-text-symbol');
+    var hiddenPriceInput = document.getElementById('hidden-price');
+
+    function updatePriceDisplay(selectedPrice) {
+        
+        // Ensure selectedPrice is a number
+        selectedPrice = parseFloat(selectedPrice);
+        var displayPrice = selectedPrice;
+         
+        // Convert to ZAR if necessary
+        if (currencyToggle.value === 'zar') {
+            displayPrice *= usdToZarRate;
+            hiddenPriceInput.value = displayPrice;
+        }
+        priceRangeValueText.innerText = displayPrice.toFixed(2);
+    }
+
+    priceRangeInput.addEventListener('input', function () {
+        var selectedPrice = this.value;
+        hiddenPriceInput.value = selectedPrice; // This keeps the original value (USD)
+        updatePriceDisplay(selectedPrice);
+    });
+
+    currencyToggle.addEventListener('change', function () {
+        currencyTextSymbol.innerText = this.value === "usd" ? "$" : "R";
+        updatePriceDisplay(priceRangeInput.value); // Update display based on the new currency
+    });
+
+    // Initialize the display
+    updatePriceDisplay(priceRangeInput.value);
+</script>
