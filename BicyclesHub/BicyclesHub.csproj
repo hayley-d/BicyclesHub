@@ -228,6 +228,7 @@
     <Content Include="Views\Home\ProductView.cshtml" />
     <Content Include="Views\Home\SearchProducts.cshtml" />
     <Content Include="Views\Home\Cart.cshtml" />
+    <Content Include="Views\Home\OrderConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Globals\" />

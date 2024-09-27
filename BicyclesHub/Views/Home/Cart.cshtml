@@ -3,7 +3,7 @@
     ViewBag.Title = "Cart";
 }
 
-<h2>Cart</h2>
+<div style="margin-top:20px; margin-left:20px;"><a href="@Url.Action("Index", "Home")" class="btn btn-primary">Back to Home</a></div>
 <div class="cart-container">
     @foreach (var product in Model)
     {
@@ -24,11 +24,19 @@
         </div>
     }
 
-    <div class="text-center mt-4">
-        <form asp-action="CreateOrder" method="post">
-            <input type="hidden" name="UserId" value="@ViewBag.User.Id" />
-            <input type="hidden" name="Products" value="@Html.Raw(Json.Encode(Model))" />
-            <button type="submit" class="btn btn-success">Create Order</button>
-        </form>
-    </div>
+<div class="text-center mt-4">
+    @using (Html.BeginForm("CreateOrder", "Home", FormMethod.Post, new { id = "store-form" }))
+    {
+        <label for="staff-select">Who Assisted?</label>
+        <select class="custom-select" id="staff-select" name="StaffId">
+            <option value="" selected></option>
+            @foreach (var s in ViewBag.Staff)
+            {
+                <option value="@s.Id">@s.FirstName</option>
+            }
+        </select>
+        <button type="submit" class="btn btn-success">Create Order</button>
+    }
+    
+</div>
 </div>

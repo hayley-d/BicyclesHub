@@ -707,7 +707,10 @@ namespace BicyclesHub.Controllers
                 return RedirectToAction("Login");
             }
             ViewBag.User = bike_store.Customers.FirstOrDefault(c => c.Id == Convert.ToInt32(Session["user"]));
+            var storeIdsInCart = bike_store.Cart.Select(p => p.StoreId).Distinct().ToHashSet();
+            var filteredStaff = bike_store.Staff.Where(s => storeIdsInCart.Contains(s.StoreId)).ToList();
 
+            ViewBag.Staff = filteredStaff;
             return View(bike_store.Cart);
         }
 
@@ -720,12 +723,80 @@ namespace BicyclesHub.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateOrder(int UserId, List<Product> Products)
+        public ActionResult CreateOrder(int StaffId)
         {
+            Debug.WriteLine("StaffID: " + StaffId);
+            int customerId = Convert.ToInt32(Session["user"]);
+            List<Product> Cart = bike_store.Cart;
+            DateTime orderDate = DateTime.Now;
+            DateTime requiredDate = orderDate.AddDays(21);
+            Byte orderStatus = 0;
+            string connectionString = Globals.ConnectionString;
+            List<int> orderIds = new List<int>();
 
+            // Group products by their StoreId to create separate orders for each store
+            var productsGroupedByStore = Cart.GroupBy(p => p.StoreId);
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
 
+                foreach (var group in productsGroupedByStore)
+                {
+                    int storeId = group.Key;
+                    string insertOrderQuery = @"INSERT INTO [sales].[orders]([customer_id], [order_status], [order_date], [required_date], [shipped_date], [store_id], [staff_id]) VALUES (@CustomerId, @OrderStatus, @OrderDate, @RequiredDate, NULL, @StoreId, @StaffId);SELECT CAST(scope_identity() AS int);";
+
+                    int newOrderId;
+                    using (SqlCommand command = new SqlCommand(insertOrderQuery, connection))
+                    {
+                        command.Parameters.AddWithValue("@CustomerId", customerId);
+                        command.Parameters.AddWithValue("@OrderStatus", orderStatus);
+                        command.Parameters.AddWithValue("@OrderDate", orderDate);
+                        command.Parameters.AddWithValue("@RequiredDate", requiredDate);
+                        command.Parameters.AddWithValue("@StoreId", storeId);
+                        command.Parameters.AddWithValue("@StaffId", StaffId);
+                        newOrderId = (int)command.ExecuteScalar();
+                        orderIds.Add(newOrderId);
+                    }
+                    int itemId = 1;
+                    // Insert associated products into the order_items table if necessary
+                    foreach (var product in Cart)
+                    {
+                        string insertOrderItemQuery = @" INSERT INTO [sales].[order_items] ([order_id], [item_id], [product_id], [quantity], [list_price], [discount]) VALUES (@OrderId, @ItemId, @ProductId, @Quantity, @ListPrice, @Discount);";
+                        var productCount = group.Count(p => p.Id == product.Id);
+
+                        using (SqlCommand command = new SqlCommand(insertOrderItemQuery, connection))
+                        {
+                            command.Parameters.AddWithValue("@OrderId", newOrderId);
+                            command.Parameters.AddWithValue("@ItemId", itemId);
+                            command.Parameters.AddWithValue("@ProductId", product.Id);
+                            command.Parameters.AddWithValue("@Quantity", productCount);
+                            command.Parameters.AddWithValue("@ListPrice", product.ListPrice);
+                            command.Parameters.AddWithValue("@Discount", 0m);
+                            command.ExecuteNonQuery();
+                        }
+                        itemId++;
+                    }
+                }
+            }
+            // Store orderIds in TempData to pass to OrderConfirmation action
+            TempData["OrderIds"] = orderIds;
             return RedirectToAction("OrderConfirmation");
         }
+
+        public ActionResult OrderConfirmation()
+        {
+            if (Session["user"] == null)
+            {
+                return RedirectToAction("Login");
+            }
+            bike_store.Cart.Clear();
+            ViewBag.Customer = bike_store.Customers.FirstOrDefault(c => c.Id == Convert.ToInt32(Session["user"]));
+            ViewBag.OrderIds = TempData["OrderIds"] as List<int>;
+            int orderId = ViewBag.OrderIds[0];
+            Debug.WriteLine("Order: " + orderId);
+            return View();
+        }
+
 
 
     }
